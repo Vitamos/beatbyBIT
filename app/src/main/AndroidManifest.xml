@@ -32,6 +32,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pt.isel.gomes.beatbybit.MainActivity" />
         </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".Activities"
+            android:label="@string/title_activity_activities"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pt.isel.gomes.beatbybit.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

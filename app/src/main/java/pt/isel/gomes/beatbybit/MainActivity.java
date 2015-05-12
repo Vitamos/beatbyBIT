@@ -22,11 +22,11 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
     public void launchAct(View view){
-        Intent intent = new Intent(this, Rec.class);
+        Intent intent = new Intent(this, Activities.class);
         startActivity(intent);
     }
     public void launchSettings(View view){
-        Intent intent = new Intent(this, Rec.class);
+        Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
 }
