@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">beatbyBIT</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_rec">Rec</string>
     <string name="action_cooper">Cooper</string>
     <string name="action_acts">Activities</string>
+    <string name="title_activity_rec">RecActivity</string>
+    <string name="title_activity_cooper">Cooper</string>
 </resources>
