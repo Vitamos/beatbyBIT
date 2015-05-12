@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_rec">Rec</string>
+    <string name="action_cooper">Cooper</string>
+    <string name="action_acts">Activities</string>
 </resources>
