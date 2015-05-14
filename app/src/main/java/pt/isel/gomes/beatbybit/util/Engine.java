@@ -12,7 +12,6 @@ public class Engine implements Serializable{
     private String[] sampleRates = {"10","100","1000"};
     private String sampleRate = sampleRates[1];
 
-
     public Engine(){
 
     }
