@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -75,10 +76,12 @@ public class MainActivity extends Activity {
         //Intent intent = new Intent(this, Settings.class);
        //intent.putExtra("engine",engine);
         //startActivity(intent);
-        File file = new File(getFilesDir()+"myText.txt");
-        FileInputStream inputStream = new FileInputStream(file);
-        Entry response = dropbox.putFile("/magnum-opus.txt", inputStream,
-                file.length(), null, null);
+        File MYDIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File beatByBIT = new File(MYDIR, "beatByBIT"); // TODO IMPROVE
+        File f = new File(beatByBIT,"myText.txt" );
+        f.createNewFile();
+        FileInputStream inputStream = new FileInputStream(f);
+        Entry response = dropbox.putFile("/magnum-opus.txt", inputStream,f.length(), null, null);
         Log.i("DbExampleLog", "The uploaded file's rev is: " + response.rev);
     }
 
