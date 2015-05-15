@@ -76,6 +76,7 @@ public class MainActivity extends Activity {
        //intent.putExtra("engine",engine);
         //startActivity(intent);
         File file = new File(getFilesDir()+"myText.txt");
+        file.createNewFile();
         FileInputStream inputStream = new FileInputStream(file);
         Entry response = dropbox.putFile("/magnum-opus.txt", inputStream,
                 file.length(), null, null);
