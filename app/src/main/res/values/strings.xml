@@ -12,4 +12,24 @@
     <string name="RecText">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="start">start</string>
     <string name="stop">stop</string>
+
+
+    <string name="pref_send_report">Send crash reports</string>
+    <string name="pref_send_report_summary">Helps to fix bugs</string>
+    <string name="pref_sync_frequency">Sync frequency</string>
+    <string name="pref_sync_frequency_summary">Set the sync frequency</string>
+    <string name="pref_user_name">Set username</string>
+    <string name="pref_user_name_summary">Set your username</string>
+
+    <string name="pref_user_profile">User Profile</string>
+    <string name="pref_update_setting">Update Settings</string>
+
+    <string name="action_changeMAC">Change MAC</string>
+    <string name="summary_changeMAC_preference">Change BITalino MAC address</string>
+    <string name="dialog_title_changeMAC_preference">Insert MAC</string>
+
+    <string name="title_samplerate_preference">Sample Rate</string>
+    <string name="summary_samplerate_preference">Choose a sample rate</string>
+    <string name="dialog_title_samplerate_preference">Choose one</string>
+
 </resources>

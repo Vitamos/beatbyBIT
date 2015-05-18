@@ -2,13 +2,12 @@ package pt.isel.gomes.beatbybit.util;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 
 public class Engine implements Serializable{
 
     private String macAddress;
-    private String cloudUser;
-    private String cloudPass;
     private String[] sampleRates = {"10","100","1000"};
     private String sampleRate = sampleRates[1];
 
@@ -41,10 +40,20 @@ public class Engine implements Serializable{
     public void uploadFile(File file){
         System.out.println("Nao implementado");
     }
+    public void writeToFile(String file, String data) {
+        try{
 
-    public void testCloud(){
-        System.out.println("Nao implementado");
+            FileOutputStream out = new FileOutputStream(new File(file));
+            out.write(data.getBytes());
+            out.close();
+
+        } catch (Exception e) { }
+
+
     }
+
+
+
     public void testCon(){
         System.out.println("Nao implementado");
     }
