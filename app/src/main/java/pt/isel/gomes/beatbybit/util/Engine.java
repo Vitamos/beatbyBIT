@@ -4,36 +4,48 @@ package pt.isel.gomes.beatbybit.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Engine implements Serializable{
 
     private String macAddress;
     private String[] sampleRates = {"10","100","1000"};
     private String sampleRate = sampleRates[1];
+    private BITalino bit;
 
     public Engine(){
-
+        bit = new BITalino();
     }
 
     public String connect(){
-       return "Hello World";
+       return macAddress+ " @ "+sampleRate;
     }
 
-    public void setMac(String mac){
-        System.out.println("Nao implementado");
+    public boolean setMac(String mac){
+        Pattern p = Pattern.compile("^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$");
+        System.out.println(mac);
+        Matcher m = p.matcher(mac);
+        boolean result = m.find();
+        if (result)
+            macAddress = mac;
+        return result;
     }
-    public void open(){
-        System.out.println("Nao implementado");
+/*
+    public static void main(String[] args){
+        Engine e = new Engine();
+
+
+    }*/
+    public Frame[] open(){
+        return bit.data;
     }
 
     public void close(){
         System.out.println("Nao implementado");
     }
 
-    public void createFile(String dados){
-        System.out.println("Nao implementado");
-    }
-    public void setupCloud(String user, String pass){
+    public void createFile(Frame[] dados){
         System.out.println("Nao implementado");
     }
 
@@ -63,8 +75,5 @@ public class Engine implements Serializable{
     }
 
 
-    public static void main(String[] args){
-        Engine a = new Engine();
-        a.connect();
-    }
+
 }

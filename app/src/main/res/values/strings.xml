@@ -13,17 +13,6 @@
     <string name="start">start</string>
     <string name="stop">stop</string>
 
-
-    <string name="pref_send_report">Send crash reports</string>
-    <string name="pref_send_report_summary">Helps to fix bugs</string>
-    <string name="pref_sync_frequency">Sync frequency</string>
-    <string name="pref_sync_frequency_summary">Set the sync frequency</string>
-    <string name="pref_user_name">Set username</string>
-    <string name="pref_user_name_summary">Set your username</string>
-
-    <string name="pref_user_profile">User Profile</string>
-    <string name="pref_update_setting">Update Settings</string>
-
     <string name="action_changeMAC">Change MAC</string>
     <string name="summary_changeMAC_preference">Change BITalino MAC address</string>
     <string name="dialog_title_changeMAC_preference">Insert MAC</string>

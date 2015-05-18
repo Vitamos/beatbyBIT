@@ -8,28 +8,30 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import pt.isel.gomes.beatbybit.util.Engine;
+import pt.isel.gomes.beatbybit.util.Frame;
+
 
 public class Activities extends Activity {
     ListView listView ;
+    private Engine engine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activities);
-
+        engine = (Engine) getIntent().getSerializableExtra("engine");
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
 
         // Defined Array values to show in ListView
-        String[] values = new String[] { "Android List View",
-                "Adapter implementation",
-                "Simple List View In Android",
-                "Create List View Android",
-                "Android Example",
-                "List View Source Code",
-                "List View Array Adapter",
-                "Android Example List View"
-        };
+        Frame[] data = engine.open();
+        String[] values;
+        values = new String[data.length];
+        for (int i = 0; i < data.length; i++){
+            values[i] = String.valueOf(data[i].digital[0]);
+        }
+
 
         // Define a new Adapter
         // First parameter - Context
