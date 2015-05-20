@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 public class Engine implements Serializable{
 
     private String macAddress;
-    private String[] sampleRates = {"10","100","1000"};
+    private final String[] sampleRates = {"10","100","1000"};
     private String sampleRate = sampleRates[1];
-    private BITalino bit;
+    private final BITalino bit;
 
     public Engine(){
         bit = new BITalino();
@@ -31,14 +31,29 @@ public class Engine implements Serializable{
             macAddress = mac;
         return result;
     }
+
 /*
     public static void main(String[] args){
         Engine e = new Engine();
 
-
     }*/
+
     public Frame[] open(){
-        return bit.data;
+        return bit.data(500);
+    }
+
+
+    public String[][] analogString(){
+        Frame[] data = open();
+        String[][] analogs = new String[data.length][data[0].analog.length];
+        for (int i = 0 ; i< data.length;i++){
+            int[] analog = data[i].analog;
+            for (int j = 0 ; j < analog.length; j++){
+                analogs[i][j] = String.valueOf(analog[j]);
+            }
+
+        }
+        return analogs;
     }
 
     public void close(){
@@ -52,6 +67,7 @@ public class Engine implements Serializable{
     public void uploadFile(File file){
         System.out.println("Nao implementado");
     }
+
     public void writeToFile(String file, String data) {
         try{
 

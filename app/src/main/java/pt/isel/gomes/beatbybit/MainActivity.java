@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
     private DropboxAPI <AndroidAuthSession> getDropboxAPI(){
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        DropboxAPI<AndroidAuthSession> mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+        DropboxAPI<AndroidAuthSession> mDBApi = new DropboxAPI<>(session);
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String token = sharedpreferences.getString("token",null);
         if (token == null){
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("token", token);
-        editor.commit();
+        editor.apply();
     }
 
     public void launchRec(View view){
@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
 
 
 
-    public void launchSettings(View view) throws IOException{
+    public void launchSettings(View view){
         Intent intent = new Intent(this, Settings.class);
         intent.putExtra("engine",engine);
         startActivity(intent);

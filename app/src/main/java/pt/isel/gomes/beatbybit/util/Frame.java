@@ -6,11 +6,11 @@ import java.io.Serializable;
  * Created by Gomes on 18-05-2015. Simula frame bitalino
  */
 public class Frame implements Serializable{
-    public int[] analog;
-    public int[] digital;
+    public final int[] digital;
+    public final int[] analog;
 
     public Frame(){
-        analog = new int[2];
-        digital = new int[6];
+        digital = new int[4];
+        analog = new int[6];
     }
 }

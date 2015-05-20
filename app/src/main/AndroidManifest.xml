@@ -20,7 +20,7 @@
         <activity
             android:name=".Rec"
             android:label="@string/title_activity_rec"
-            android:parentActivityName=".MainActivity" >
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pt.isel.gomes.beatbybit.MainActivity" />
@@ -28,7 +28,7 @@
         <activity
             android:name=".Cooper"
             android:label="@string/title_activity_cooper"
-            android:parentActivityName=".MainActivity" >
+             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pt.isel.gomes.beatbybit.MainActivity" />
@@ -40,7 +40,7 @@
         <activity
             android:name=".Activities"
             android:label="@string/title_activity_activities"
-            android:parentActivityName=".MainActivity" >
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pt.isel.gomes.beatbybit.MainActivity" />

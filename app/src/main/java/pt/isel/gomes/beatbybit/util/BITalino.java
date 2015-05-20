@@ -7,14 +7,18 @@ import java.io.Serializable;
  */
 public class BITalino implements Serializable{
 
-    public Frame[] data;
+    public Frame[] data(int samples){
+        Frame[] data = new Frame[samples];
+        for (int i = 0; i < samples ; i++){
+            data[i]= new Frame();
+        }
+        return data;
+    }
 
 
     public BITalino(){
-        data = new Frame[100];
-        for (int i = 0; i < 100 ; i++){
-            data[i]= new Frame();
-        }
+
     }
+
 
 }

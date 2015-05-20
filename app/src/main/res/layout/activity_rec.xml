@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/chronometer"
         android:layout_marginTop="41dp"
-        android:textSize="50dp"
+        android:textSize="50sp"
         android:layout_below="@+id/stop"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

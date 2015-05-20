@@ -11,13 +11,13 @@ import pt.isel.gomes.beatbybit.util.Engine;
 
 public class Settings extends Activity {
 
-    private Engine engine;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        engine = (Engine) getIntent().getSerializableExtra("engine");
+        Engine engine = (Engine) getIntent().getSerializableExtra("engine");
         // Display the fragment as the main content.
         FragmentManager mFragmentManager = getFragmentManager();
         FragmentTransaction mFragmentTransaction = mFragmentManager
