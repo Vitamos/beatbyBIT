@@ -1,4 +1,4 @@
-package pt.isel.gomes.beatbybit.services;
+^package pt.isel.gomes.beatbybit.services;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -23,18 +23,6 @@ public class DataDownloader extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        int n = 0;
         ArrayList<Frame> frames = new ArrayList<>();
-        long start = 0;
-        while(true){
-            long elapsed = chronometer.getBase() - start;
-            if (elapsed >= 500){
-                start+=500;
-                frames.addAll(Arrays.asList(engine.open()));
-                n+=500;
-
-            }
-        }
-        return (Frame[]) frames.toArray();
-    }
-}
+        frames.addAll(Arrays.asList(engine.open()));\21
+}}
