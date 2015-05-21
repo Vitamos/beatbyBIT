@@ -39,7 +39,7 @@ public class Engine implements Serializable{
     }*/
 
     public Frame[] open(){
-        return bit.data(500);
+        return bit.data(5);
     }
 
 
