@@ -15,6 +15,7 @@ public class Rec extends Activity {
     private Chronometer chronometer;
     private Engine engine;
     private boolean recording = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,17 +24,18 @@ public class Rec extends Activity {
         engine = (Engine) getIntent().getSerializableExtra("engine");
     }
 
-    public void startClock(View v){
-            chronometer.setBase(SystemClock.elapsedRealtime());
-            chronometer.start();
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
+    public void startClock(View v) {
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
 
-            Toast toast = Toast.makeText(context, engine.connect(), duration);
-            toast.show();
+        Toast toast = Toast.makeText(context, engine.connect(), duration);
+        toast.show();
 
     }
-    public void stopClock(View v){
+
+    public void stopClock(View v) {
         chronometer.stop();
     }
 

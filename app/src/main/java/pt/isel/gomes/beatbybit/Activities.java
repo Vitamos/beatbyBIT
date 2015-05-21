@@ -12,7 +12,7 @@ import pt.isel.gomes.beatbybit.util.Engine;
 
 
 public class Activities extends Activity {
-    private ListView listView ;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +25,11 @@ public class Activities extends Activity {
         // Defined Array values to show in ListView
         String[][] analogs = engine.analogString();
         String[] values = new String[analogs.length];
-        for (int i = 0; i < analogs.length; i++){
+        for (int i = 0; i < analogs.length; i++) {
             String line = "";
             String[] channel = analogs[i];
-            for (int j = 0 ; j < channel.length; j++){
-                line += "Ch"+j+": "+channel[j];
+            for (int j = 0; j < channel.length; j++) {
+                line += "Ch" + j + ": " + channel[j];
             }
             values[i] = line;
         }
@@ -44,8 +44,8 @@ public class Activities extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-        String  itemValue    = (String) listView.getItemAtPosition(position);
-        Toast.makeText(getApplicationContext(),
+                String itemValue = (String) listView.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(),
                         "Position :" + position + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
                         .show();
 

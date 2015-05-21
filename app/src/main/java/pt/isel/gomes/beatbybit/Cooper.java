@@ -23,7 +23,7 @@ public class Cooper extends Activity {
         engine = (Engine) getIntent().getSerializableExtra("engine");
     }
 
-    public void startClock(View v){
+    public void startClock(View v) {
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         Context context = getApplicationContext();
@@ -33,7 +33,8 @@ public class Cooper extends Activity {
         toast.show();
 
     }
-    public void stopClock(View v){
+
+    public void stopClock(View v) {
         chronometer.stop();
     }
 

@@ -21,7 +21,6 @@ import java.io.IOException;
 import pt.isel.gomes.beatbybit.util.Engine;
 
 
-
 public class MainActivity extends Activity {
     private Engine engine;
     final static private String APP_KEY = "un624qhagsgq8wb";
@@ -40,13 +39,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    private DropboxAPI <AndroidAuthSession> getDropboxAPI(){
+    private DropboxAPI<AndroidAuthSession> getDropboxAPI() {
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         DropboxAPI<AndroidAuthSession> mDBApi = new DropboxAPI<>(session);
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String token = sharedpreferences.getString("token",null);
-        if (token == null){
+        String token = sharedpreferences.getString("token", null);
+        if (token == null) {
             mDBApi.getSession().startOAuth2Authentication(this);
             return mDBApi;
         }
@@ -54,54 +53,50 @@ public class MainActivity extends Activity {
         return mDBApi;
     }
 
-    public void storePrefs(String token){
+    public void storePrefs(String token) {
         SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("token", token);
         editor.apply();
     }
 
-    public void launchRec(View view){
+    public void launchRec(View view) {
         Intent intent = new Intent(this, Rec.class);
-        intent.putExtra("engine",engine);
+        intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
-    public void launchCooper(View view){
+    public void launchCooper(View view) {
         Intent intent = new Intent(this, Cooper.class);
-        intent.putExtra("engine",engine);
+        intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
-    public void launchAct(View view){
+    public void launchAct(View view) {
         Intent intent = new Intent(this, Activities.class);
-        intent.putExtra("engine",engine);
+        intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
-
-
-    public void launchSettings(View view){
+    public void launchSettings(View view) {
         Intent intent = new Intent(this, Settings.class);
-        intent.putExtra("engine",engine);
+        intent.putExtra("engine", engine);
         startActivity(intent);
-
-
     }
-    public void testCloud() throws IOException, DropboxException
 
-    {
+    public void testCloud() throws IOException, DropboxException {
         File file = new File("myText.txt");
 
         file.createNewFile();
-        engine.writeToFile("myText.txt","teste");
+        engine.writeToFile("myText.txt", "teste");
         FileInputStream inputStream = new FileInputStream(file);
-        DropboxAPI.Entry response = dropbox.putFile("/magnum-opus.txt", inputStream,
-                file.length(), null, null);}
+        dropbox.putFile("/magnum-opus.txt", inputStream,
+                file.length(), null, null);
+    }
 
     protected void onResume() {
         super.onResume();
-        if (dropbox.getSession().authenticationSuccessful())  {
+        if (dropbox.getSession().authenticationSuccessful()) {
             try {
                 // Required to complete auth, sets the access token on the session
                 dropbox.getSession().finishAuthentication();
