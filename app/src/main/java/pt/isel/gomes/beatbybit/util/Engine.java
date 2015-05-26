@@ -1,6 +1,8 @@
 package pt.isel.gomes.beatbybit.util;
 
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
@@ -61,7 +63,7 @@ public class Engine implements Serializable {
     }
 
     public void createFile(Frame[] dados) {
-        System.out.println("Nao implementado");
+        Log.i("derp", String.valueOf(dados[0].digital[0]));
     }
 
     public void uploadFile(File file) {

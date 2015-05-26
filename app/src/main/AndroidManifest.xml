@@ -7,7 +7,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -58,6 +59,17 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".services.download.DownService"/>
+        <receiver android:name=".services.download.DownReceiver">
+            <intent-filter>
+                <action android:name="pt.isel.gomes.beatbybit.ACTION.start" />
+                <action android:name="pt.isel.gomes.beatbybit.ACTION.stop" />
+            </intent-filter>
+
+        </receiver>
+        <provider android:name=".services.download.DownProvider"
+            android:authorities="com.example.provider.DownProvider">
+        </provider>
     </application>
 
 </manifest>

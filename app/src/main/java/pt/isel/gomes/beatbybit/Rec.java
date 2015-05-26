@@ -1,13 +1,13 @@
 package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Chronometer;
-import android.widget.Toast;
 
+import pt.isel.gomes.beatbybit.services.download.DownReceiver;
 import pt.isel.gomes.beatbybit.util.Engine;
 
 
@@ -15,6 +15,7 @@ public class Rec extends Activity {
     private Chronometer chronometer;
     private Engine engine;
     private boolean recording = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +28,19 @@ public class Rec extends Activity {
     public void startClock(View v) {
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
+      /*  Toast toast = Toast.makeText(context, engine.connect(), duration);
+        toast.show();*/
 
-        Toast toast = Toast.makeText(context, engine.connect(), duration);
-        toast.show();
+        Intent intent = new Intent(this,DownReceiver.class);
+        intent.setAction("pt.isel.gomes.beatbybit.ACTION.start");
 
+        sendBroadcast(intent);
     }
 
     public void stopClock(View v) {
         chronometer.stop();
+        Intent intent = new Intent(this,DownReceiver.class);
+        intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
+        sendBroadcast(intent);
     }
-
 }
