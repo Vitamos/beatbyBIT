@@ -12,15 +12,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-/**
- * Created by Gomes on 25-05-2015.
- */
+
 public class DownProvider extends ContentProvider {
 
     static final String PROVIDER_NAME = "com.example.provider.DownProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/data";
     static final Uri CONTENT_URI = Uri.parse(URL);
-    String herp;
+    static final UriMatcher uriMatcher;
   /*  static final String c1 = "c1";
     static final String c2 = "c2";
     static final String c3 = "c3";
@@ -33,21 +31,12 @@ public class DownProvider extends ContentProvider {
 
     static final int STUDENTS = 1;
     static final int STUDENT_ID = 2;*/
-
-    static final UriMatcher uriMatcher;
-
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "data", 0);
     }
-
-    /**
-     * Database specific constant declarations
-     */
-    private SQLiteDatabase db;
     static final String dbName = "data";
     static final String tableName = "current";
-    static final int version = 1;
     static final String dbCreate =
             " CREATE TABLE " + tableName +
                     " (c1 TEXT NOT NULL," +
@@ -57,25 +46,12 @@ public class DownProvider extends ContentProvider {
                     "c5 TEXT NOT NULL," +
                     "c6 TEXT NOT NULL," +
                     "date TEXT NOT NULL);";
-
-
-    private static class DatabaseHelper extends SQLiteOpenHelper {
-        DatabaseHelper(Context context) {
-            super(context, dbName, null, version);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(dbCreate);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion,
-                              int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + tableName);
-            onCreate(db);
-        }
-    }
+    static final int version = 1;
+    String herp;
+    /**
+     * Database specific constant declarations
+     */
+    private SQLiteDatabase db;
 
     @Override
     public boolean onCreate() {
@@ -84,7 +60,6 @@ public class DownProvider extends ContentProvider {
         db = dbHelper.getWritableDatabase();
         return (db == null) ? false : true;
     }
-
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -97,12 +72,10 @@ public class DownProvider extends ContentProvider {
         throw new SQLException("Failed to add a record into " + uri);
     }
 
-
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
     }
-
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -121,9 +94,27 @@ public class DownProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int count = db.delete(tableName,selection,selectionArgs);
+        int count = db.delete(tableName, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return count;
+    }
+
+    private static class DatabaseHelper extends SQLiteOpenHelper {
+        DatabaseHelper(Context context) {
+            super(context, dbName, null, version);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            db.execSQL(dbCreate);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion,
+                              int newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + tableName);
+            onCreate(db);
+        }
     }
 
 }

@@ -3,9 +3,13 @@ package pt.isel.gomes.beatbybit.util;
 import java.io.Serializable;
 
 /**
- * Created by Gomes on 18-05-2015. Simula bitalino
+ * Simula bitalino
  */
 public class BITalino implements Serializable {
+
+    public BITalino() {
+
+    }
 
     public Frame[] data(int samples) {
         Frame[] data = new Frame[samples];
@@ -13,11 +17,6 @@ public class BITalino implements Serializable {
             data[i] = new Frame();
         }
         return data;
-    }
-
-
-    public BITalino() {
-
     }
 
 

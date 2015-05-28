@@ -14,7 +14,6 @@ import pt.isel.gomes.beatbybit.util.Engine;
 public class Rec extends Activity {
     private Chronometer chronometer;
     private Engine engine;
-    private boolean recording = false;
 
 
     @Override
@@ -31,7 +30,7 @@ public class Rec extends Activity {
       /*  Toast toast = Toast.makeText(context, engine.connect(), duration);
         toast.show();*/
 
-        Intent intent = new Intent(this,DownReceiver.class);
+        Intent intent = new Intent(this, DownReceiver.class);
         intent.setAction("pt.isel.gomes.beatbybit.ACTION.start");
 
         sendBroadcast(intent);
@@ -39,7 +38,16 @@ public class Rec extends Activity {
 
     public void stopClock(View v) {
         chronometer.stop();
-        Intent intent = new Intent(this,DownReceiver.class);
+        Intent intent = new Intent(this, DownReceiver.class);
+        intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
+        sendBroadcast(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        chronometer.stop();
+        Intent intent = new Intent(this, DownReceiver.class);
         intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
         sendBroadcast(intent);
     }

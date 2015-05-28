@@ -22,9 +22,9 @@ import pt.isel.gomes.beatbybit.util.Engine;
 
 
 public class MainActivity extends Activity {
-    private Engine engine;
     final static private String APP_KEY = "un624qhagsgq8wb";
     final static private String APP_SECRET = "wid188gkonsbj62";
+    private Engine engine;
     private DropboxAPI<AndroidAuthSession> dropbox;
 
     @Override

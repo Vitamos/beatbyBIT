@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <PreferenceCategory
-        android:title="@string/action_settings">
+    <PreferenceCategory android:title="@string/action_settings">
 
         <EditTextPreference
+            android:dialogTitle="@string/dialog_title_changeMAC_preference"
             android:key="mac_preference"
-            android:title="@string/action_changeMAC"
             android:summary="@string/summary_changeMAC_preference"
-            android:dialogTitle="@string/dialog_title_changeMAC_preference" />
+            android:title="@string/action_changeMAC" />
         <ListPreference
-            android:key="list_preference"
-            android:title="@string/title_samplerate_preference"
-            android:summary="@string/summary_samplerate_preference"
+            android:dialogTitle="@string/dialog_title_samplerate_preference"
             android:entries="@array/entries_samplerate_preference"
             android:entryValues="@array/values_samplerate_preference"
-            android:dialogTitle="@string/dialog_title_samplerate_preference" />
+            android:key="list_preference"
+            android:summary="@string/summary_samplerate_preference"
+            android:title="@string/title_samplerate_preference" />
 
     </PreferenceCategory>
 
