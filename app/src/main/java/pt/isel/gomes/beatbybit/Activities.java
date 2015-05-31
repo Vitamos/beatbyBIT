@@ -1,8 +1,6 @@
 package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,9 +12,6 @@ import pt.isel.gomes.beatbybit.util.Engine;
 
 
 public class Activities extends Activity {
-    static final String PROVIDER_NAME = "com.example.provider.DownProvider";
-    static final String URL = "content://" + PROVIDER_NAME + "/data";
-    static final Uri URI = Uri.parse(URL);
     private ListView listView;
 
     @Override
@@ -27,7 +22,7 @@ public class Activities extends Activity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
 
-        Cursor cursor = getContentResolver().query(URI, null, null, null, null);
+        String[] values = engine.getFiles();
 
         // Defined Array values to show in ListView
      /*   String[][] analogs = engine.analogString();
@@ -39,7 +34,6 @@ public class Activities extends Activity {
             values[i] = line;
         }*/
 
-        String[] values = engine.createFile("teste",cursor);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
@@ -53,7 +47,7 @@ public class Activities extends Activity {
 
                 String itemValue = (String) listView.getItemAtPosition(position);
                 Toast.makeText(getApplicationContext(),
-                        "Position :" + position + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
+                        "  ListItem : " + itemValue, Toast.LENGTH_LONG)
                         .show();
 
             }

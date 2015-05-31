@@ -23,11 +23,10 @@ public class DownService extends IntentService {
     static final String c5 = "c5";
     static final String c6 = "c6";
     static final String date = "date";
-    static final String PROVIDER_NAME = "com.example.provider.DownProvider";
-    static final String URL = "content://" + PROVIDER_NAME + "/data";
-    static final Uri URI = Uri.parse(URL);
+    private final String PROVIDER_NAME = "com.example.provider.DownProvider";
+    private final String URL = "content://" + PROVIDER_NAME + "/data";
+    private final Uri URI = Uri.parse(URL);
     Calendar c = Calendar.getInstance();
-
     SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private Engine engine;
     public DownService() {

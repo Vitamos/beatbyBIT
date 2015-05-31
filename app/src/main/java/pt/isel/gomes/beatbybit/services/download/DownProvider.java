@@ -19,22 +19,12 @@ public class DownProvider extends ContentProvider {
     static final String URL = "content://" + PROVIDER_NAME + "/data";
     static final Uri CONTENT_URI = Uri.parse(URL);
     static final UriMatcher uriMatcher;
-  /*  static final String c1 = "c1";
-    static final String c2 = "c2";
-    static final String c3 = "c3";
-    static final String c4 = "c4";
-    static final String c5 = "c5";
-    static final String c6 = "c6";
-    static final String date = "date";
 
-    private static HashMap<String, String> STUDENTS_PROJECTION_MAP;
-
-    static final int STUDENTS = 1;
-    static final int STUDENT_ID = 2;*/
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER_NAME, "data", 0);
     }
+
     static final String dbName = "data";
     static final String tableName = "current";
     static final String dbCreate =
@@ -47,7 +37,6 @@ public class DownProvider extends ContentProvider {
                     "c6 TEXT NOT NULL," +
                     "date TEXT NOT NULL);";
     static final int version = 1;
-    String herp;
     /**
      * Database specific constant declarations
      */
