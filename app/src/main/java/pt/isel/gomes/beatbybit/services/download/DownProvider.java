@@ -15,16 +15,6 @@ import android.net.Uri;
 
 public class DownProvider extends ContentProvider {
 
-    static final String PROVIDER_NAME = "com.example.provider.DownProvider";
-    static final String URL = "content://" + PROVIDER_NAME + "/data";
-    static final Uri CONTENT_URI = Uri.parse(URL);
-    static final UriMatcher uriMatcher;
-
-    static {
-        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "data", 0);
-    }
-
     static final String dbName = "data";
     static final String tableName = "current";
     static final String dbCreate =
@@ -37,9 +27,16 @@ public class DownProvider extends ContentProvider {
                     "c6 TEXT NOT NULL," +
                     "date TEXT NOT NULL);";
     static final int version = 1;
-    /**
-     * Database specific constant declarations
-     */
+    private static final String PROVIDER_NAME = "com.example.provider.DownProvider";
+    private static final String URL = "content://" + PROVIDER_NAME + "/data";
+    private static final Uri CONTENT_URI = Uri.parse(URL);
+    private static final UriMatcher uriMatcher;
+
+    static {
+        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        uriMatcher.addURI(PROVIDER_NAME, "data", 0);
+    }
+
     private SQLiteDatabase db;
 
     @Override

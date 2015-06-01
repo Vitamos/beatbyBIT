@@ -11,8 +11,8 @@
             android:title="@string/action_changeMAC" />
         <ListPreference
             android:dialogTitle="@string/dialog_title_samplerate_preference"
-            android:entries="@array/entries_samplerate_preference"
-            android:entryValues="@array/values_samplerate_preference"
+            android:entries="@array/samplerate"
+            android:entryValues="@array/samplerate"
             android:key="list_preference"
             android:summary="@string/summary_samplerate_preference"
             android:title="@string/title_samplerate_preference" />

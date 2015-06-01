@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -14,8 +13,6 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import pt.isel.gomes.beatbybit.util.Engine;
@@ -64,21 +61,10 @@ public class MainActivity extends Activity {
     }
 
     public void launchSettings(View view) throws IOException, DropboxException {
-        //Intent intent = new Intent(this, Settings.class);
-        //intent.putExtra("engine", engine);
-        //startActivity(intent);
-        testCloud();
-    }
+        Intent intent = new Intent(this, Settings.class);
+        intent.putExtra("engine", engine);
+        startActivity(intent);
 
-    public void testCloud() throws IOException, DropboxException {
-        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        File dir = new File(root, "beat");
-        String[] values = engine.getFiles();
-        for (String s : values) {
-            File f = new File(dir, s);
-            FileInputStream inputStream = new FileInputStream(f);
-            dropbox.putFile(s, inputStream, f.length(), null, null);
-        }
     }
 
 

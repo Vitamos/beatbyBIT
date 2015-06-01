@@ -2,9 +2,7 @@ package pt.isel.gomes.beatbybit.util;
 
 import java.io.Serializable;
 
-/**
- * Created by Gomes on 18-05-2015. Simula frame bitalino
- */
+
 public class Frame implements Serializable {
     public final int[] digital;
     public final int[] analog;

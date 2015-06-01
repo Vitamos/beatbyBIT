@@ -16,19 +16,14 @@ import pt.isel.gomes.beatbybit.util.Frame;
 
 
 public class DownService extends IntentService {
-    static final String c1 = "c1";
-    static final String c2 = "c2";
-    static final String c3 = "c3";
-    static final String c4 = "c4";
-    static final String c5 = "c5";
-    static final String c6 = "c6";
-    static final String date = "date";
+
     private final String PROVIDER_NAME = "com.example.provider.DownProvider";
     private final String URL = "content://" + PROVIDER_NAME + "/data";
     private final Uri URI = Uri.parse(URL);
-    Calendar c = Calendar.getInstance();
-    SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
+    private Calendar c = Calendar.getInstance();
+    private SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private Engine engine;
+
     public DownService() {
         super("downService");
 
@@ -45,13 +40,13 @@ public class DownService extends IntentService {
         Frame[] a = engine.open();
         for (Frame f : a) {
             int[] aux = f.analog;
-            values.put(c1, aux[0]);
-            values.put(c2, aux[1]);
-            values.put(c3, aux[2]);
-            values.put(c4, aux[3]);
-            values.put(c5, aux[4]);
-            values.put(c6, aux[5]);
-            values.put(date, format.format(c.getTime()));
+            values.put("c1", aux[0]);
+            values.put("c2", aux[1]);
+            values.put("c3", aux[2]);
+            values.put("c4", aux[3]);
+            values.put("c5", aux[4]);
+            values.put("c6", aux[5]);
+            values.put("date", format.format(c.getTime()));
         }
 
 

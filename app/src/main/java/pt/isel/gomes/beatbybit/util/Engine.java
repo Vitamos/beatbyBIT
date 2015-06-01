@@ -1,6 +1,5 @@
 package pt.isel.gomes.beatbybit.util;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,24 +9,26 @@ import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AppKeyPair;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Engine implements Serializable {
 
-    final static private String APP_KEY = "un624qhagsgq8wb";
-    final static private String APP_SECRET = "wid188gkonsbj62";
-    public final String PROVIDER_NAME = "com.example.provider.DownProvider";
-    public final String URL = "content://" + PROVIDER_NAME + "/data";
+    private final static String APP_KEY = "un624qhagsgq8wb";
+    private final static String APP_SECRET = "wid188gkonsbj62";
     private final String[] sampleRates = {"10", "100", "1000"};
     private String sampleRate = sampleRates[1];
     private final BITalino bit;
     private String macAddress;
+
     public Engine() {
         bit = new BITalino();
     }
@@ -75,8 +76,9 @@ public class Engine implements Serializable {
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             String line = "";
-            for (int j = 0; j < cursor.getColumnCount(); j++) {
-                line += cursor.getColumnName(j) + " : " + cursor.getString(j) + " ";
+            line += cursor.getString(0);
+            for (int j = 1; j < cursor.getColumnCount(); j++) {
+                line += "," + cursor.getString(j);
             }
             values[i] = line;
         }
@@ -84,14 +86,10 @@ public class Engine implements Serializable {
         return values;
     }
 
-    public void uploadFile(File file) {
-        System.out.println("Nao implementado");
-    }
-
     public void writeToFile(String file, String[] data) {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        File dir = new File(root,"beat");
-        if(!dir.exists()){
+        File dir = new File(root, "beat");
+        if (!dir.exists()) {
             dir.mkdirs();
         }
         File f = new File(dir + "/" + file);
@@ -115,6 +113,16 @@ public class Engine implements Serializable {
         return dir.list();
     }
 
+    public void testCloud(DropboxAPI<AndroidAuthSession> dropbox) throws IOException, DropboxException {
+        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        File dir = new File(root, "beat");
+        String[] values = getFiles();
+        for (String s : values) {
+            File f = new File(dir, s);
+            FileInputStream inputStream = new FileInputStream(f);
+            dropbox.putFileOverwrite(s, inputStream, f.length(), null);
+        }
+    }
 
     public void testCon() {
         System.out.println("Nao implementado");
