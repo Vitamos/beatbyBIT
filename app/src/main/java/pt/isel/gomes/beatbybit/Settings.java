@@ -15,8 +15,6 @@ public class Settings extends Activity {
         super.onCreate(savedInstanceState);
         Engine engine = (Engine) getIntent().getSerializableExtra("engine");
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
-
-
     }
 
     public static class PrefsFragment extends PreferenceFragment {
@@ -24,7 +22,6 @@ public class Settings extends Activity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preference);
         }
