@@ -22,7 +22,7 @@ public class DownReceiver extends BroadcastReceiver {
             alarmManager.setInexactRepeating(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(),
-                    2000,
+                    1000,
                     pendingAlarmIntent);
         } else if (intent.getAction().equals("pt.isel.gomes.beatbybit.ACTION.stop")) {
             context.stopService(downIntent);

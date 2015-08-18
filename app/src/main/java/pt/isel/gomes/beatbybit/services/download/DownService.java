@@ -13,6 +13,8 @@ import java.util.Set;
 
 import pt.isel.gomes.beatbybit.util.Engine;
 import pt.isel.gomes.beatbybit.util.Frame;
+import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
+import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 
 
 public class DownService extends IntentService {
@@ -37,15 +39,19 @@ public class DownService extends IntentService {
         ContentValues values = new ContentValues();
         Set names = values.keySet();
         Log.i("TESTPROVIDER", String.valueOf(names.size()));
-        Frame[] a = engine.open();
-        for (Frame f : a) {
-            int[] aux = f.analog;
-            values.put("c1", aux[0]);
-            values.put("c2", aux[1]);
-            values.put("c3", aux[2]);
-            values.put("c4", aux[3]);
-            values.put("c5", aux[4]);
-            values.put("c6", aux[5]);
+        BITalinoFrame[] a = new BITalinoFrame[0];
+        try {
+            a = engine.read(6);
+        } catch (BITalinoException e) {
+            e.printStackTrace();
+        }
+        for (BITalinoFrame f : a) {
+            values.put("c1", f.getAnalog(0));
+            values.put("c2", f.getAnalog(1));
+            values.put("c3", f.getAnalog(2));
+            values.put("c4", f.getAnalog(3));
+            values.put("c5", f.getAnalog(4));
+            values.put("c6", f.getAnalog(5));
             values.put("date", format.format(c.getTime()));
         }
 

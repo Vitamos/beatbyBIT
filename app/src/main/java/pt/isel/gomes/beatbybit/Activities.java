@@ -23,25 +23,26 @@ public class Activities extends Activity {
         listView = (ListView) findViewById(R.id.list);
 
         String[] values = engine.getFiles();
+        if (values != null && values.length > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                    String itemValue = (String) listView.getItemAtPosition(position);
+                    Toast.makeText(getApplicationContext(),
+                            "  ListItem : " + itemValue, Toast.LENGTH_LONG)
+                            .show();
 
-                String itemValue = (String) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
+                }
 
-            }
-
-        });
+            });
+        }
     }
 
 }

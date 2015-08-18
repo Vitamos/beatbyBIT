@@ -21,4 +21,9 @@
 
     </PreferenceCategory>
 
+    <Preference
+        android:title="Record Directory"
+        android:key="dirbutton"
+        android:summary="Access the record directory"
+        />
 </PreferenceScreen>

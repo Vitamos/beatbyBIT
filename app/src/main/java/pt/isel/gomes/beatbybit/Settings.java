@@ -2,14 +2,16 @@ package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.File;
 
 import pt.isel.gomes.beatbybit.util.Engine;
 
@@ -37,10 +39,10 @@ public class Settings extends Activity {
                 String pattern = "^([0-9a-f]{2}[:-]){5}([0-9a-f]{2})$";
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Boolean rtnval = true;
+                    boolean rtnval = true;
                     String address = (String) newValue;
                     Log.i("ADD ", address);
-                    if (!address.matches(pattern)){
+                    if (!address.matches(pattern)) {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle("Invalid Input");
                         builder.setMessage("Invalid MAC Address...");
@@ -49,6 +51,17 @@ public class Settings extends Activity {
                         rtnval = false;
                     }
                     return rtnval;
+                }
+            });
+            Preference dirButton = (Preference) findPreference("dirbutton");
+            dirButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+                            + "/beat/");
+                    intent.setDataAndType(uri, "resource/folder");
+                    startActivity(Intent.createChooser(intent, "Open folder"));
+                    return true;
                 }
             });
         }

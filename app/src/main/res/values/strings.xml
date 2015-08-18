@@ -20,5 +20,8 @@
     <string name="title_samplerate_preference">Sample Rate</string>
     <string name="summary_samplerate_preference">Choose a sample rate</string>
     <string name="dialog_title_samplerate_preference">Choose one</string>
+    <string name="statusMAC">MAC: </string>
+    <string name="statusSampleRate">Sample Rate: </string>
+    <string name="statusText">Status: </string>
 
 </resources>

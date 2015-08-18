@@ -2,10 +2,12 @@ package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Chronometer;
 
@@ -56,8 +58,13 @@ public class Rec extends Activity {
         String[] data = engine.createFile(cursor);
         engine.writeToFile(format.format(c.getTime()) + ".txt", data);
         getContentResolver().delete(URI, null, null);
-        intent = new Intent(this, SyncService.class);
-        startService(intent);
+        //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean prefDrop = prefs.getBoolean("prefDrop", false);
+        if (prefDrop){
+            intent = new Intent(this, SyncService.class);
+            startService(intent);
+        }
     }
 
     @Override

@@ -1,13 +1,17 @@
 package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -16,7 +20,7 @@ import com.dropbox.client2.exception.DropboxException;
 import java.io.IOException;
 
 import pt.isel.gomes.beatbybit.util.Engine;
-
+import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
 
 public class MainActivity extends Activity {
 
@@ -26,13 +30,49 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         engine = new Engine();
-        dropbox = engine.getDropboxAPI(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor prefEdit = prefs.edit();
+        boolean checkDrop = prefs.getBoolean("checkDrop", false);
+        if (!checkDrop) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            prefEdit.putBoolean("prefDrop", true);
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            prefEdit.putBoolean("prefDrop", false);
+                            break;
+                    }
+                    prefEdit.putBoolean("checkDrop", true);
+                    prefEdit.commit();
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Do you want to sync with Dropbox?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+
+        }
+        boolean prefDrop = prefs.getBoolean("prefDrop", false);
+        if (prefDrop) {
+            dropbox = getDropbox();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        refreshStatus();
+        engine.toastStatus(this);
+
+
+    }
+
+    public DropboxAPI<AndroidAuthSession> getDropbox() {
+        return engine.getDropboxAPI(this);
     }
 
     public void storePrefs(String token) {
@@ -67,18 +107,55 @@ public class MainActivity extends Activity {
 
     }
 
-
+    //    protected void onResume() {
+//        super.onResume();
+//        if (dropbox.getSession().authenticationSuccessful()) {
+//            try {
+//                // Required to complete auth, sets the access token on the session
+//                dropbox.getSession().finishAuthentication();
+//                String token = dropbox.getSession().getOAuth2AccessToken();
+//                storePrefs(token);
+//            } catch (IllegalStateException e) {
+//                Log.i("DbAuthLog", "Error authenticating", e);
+//            }
+//        }
+//    }
     protected void onResume() {
         super.onResume();
-        if (dropbox.getSession().authenticationSuccessful()) {
-            try {
-                // Required to complete auth, sets the access token on the session
-                dropbox.getSession().finishAuthentication();
-                String token = dropbox.getSession().getOAuth2AccessToken();
-                storePrefs(token);
-            } catch (IllegalStateException e) {
-                Log.i("DbAuthLog", "Error authenticating", e);
-            }
+        refreshStatus();
+    }
+
+    public void refreshStatus() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        engine.setMac(prefs.getString("mac_preference", "null"));
+        final TextView statusMAC = (TextView) findViewById(R.id.statusMAC);
+        statusMAC.setText(engine.getMacAddress());
+        try {
+            engine.setSampleRate(Integer.valueOf(prefs.getString("list_preference", "100")));
+        } catch (BITalinoException e) {
+            e.printStackTrace();
         }
+        final TextView statusSample = (TextView) findViewById(R.id.statusSample);
+        statusSample.setText(String.valueOf(engine.getSampleRate()));
+    }
+
+    public boolean bitBluetooth() {
+        BluetoothDevice bita = engine.startBluetooth();
+        BluetoothSocket socket;
+        try {
+            socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
+            socket.connect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            engine.open(socket.getInputStream(), socket.getOutputStream());
+        } catch (BITalinoException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
