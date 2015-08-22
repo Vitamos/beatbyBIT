@@ -108,6 +108,9 @@ public class Engine implements Serializable {
         String token = sharedpreferences.getString("token", null);
         if (token == null) {
             mDBApi.getSession().startOAuth2Authentication(c);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("token", token);
+            editor.apply();
             return mDBApi;
         }
         mDBApi.getSession().setOAuth2AccessToken(token);
@@ -197,7 +200,11 @@ public class Engine implements Serializable {
     }
 
     public BluetoothDevice startBluetooth() {
-        return bluetooth.getRemoteDevice(macAddress);
+        try {
+            return bluetooth.getRemoteDevice(macAddress);
+        } catch (NullPointerException e) {
+            return null;
+        }
 
     }
 }

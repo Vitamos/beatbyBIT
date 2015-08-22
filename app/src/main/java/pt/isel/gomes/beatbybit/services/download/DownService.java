@@ -12,7 +12,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import pt.isel.gomes.beatbybit.util.Engine;
-import pt.isel.gomes.beatbybit.util.Frame;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 

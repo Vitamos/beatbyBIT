@@ -22,8 +22,13 @@
     </PreferenceCategory>
 
     <Preference
-        android:title="Record Directory"
         android:key="dirbutton"
         android:summary="Access the record directory"
-        />
+        android:title="Record Directory" />
+
+    <Preference
+        android:key="dropbutton"
+        android:summary="Sync with Dropbox"
+        android:title="Use Dropbox" />
+
 </PreferenceScreen>

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,12 +27,30 @@ public class MainActivity extends Activity {
 
     private Engine engine;
     private DropboxAPI<AndroidAuthSession> dropbox;
+    private SharedPreferences.Editor prefEdit;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         engine = new Engine();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor prefEdit = prefs.edit();
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefEdit = prefs.edit();
+        checkDrop();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        refreshStatus();
+        engine.toastStatus(this);
+    }
+
+    public DropboxAPI<AndroidAuthSession> getDropbox() {
+        return engine.getDropboxAPI(this);
+    }
+
+    public void checkDrop() {
         boolean checkDrop = prefs.getBoolean("checkDrop", false);
         if (!checkDrop) {
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -40,6 +59,7 @@ public class MainActivity extends Activity {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
                             prefEdit.putBoolean("prefDrop", true);
+                            dropbox = getDropbox();
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -57,29 +77,9 @@ public class MainActivity extends Activity {
         }
         boolean prefDrop = prefs.getBoolean("prefDrop", false);
         if (prefDrop) {
-            dropbox = getDropbox();
+
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
-        refreshStatus();
-        engine.toastStatus(this);
 
-
-    }
-
-    public DropboxAPI<AndroidAuthSession> getDropbox() {
-        return engine.getDropboxAPI(this);
-    }
-
-    public void storePrefs(String token) {
-        SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("token", token);
-        editor.apply();
     }
 
     public void launchRec(View view) {
@@ -107,22 +107,30 @@ public class MainActivity extends Activity {
 
     }
 
-    //    protected void onResume() {
-//        super.onResume();
-//        if (dropbox.getSession().authenticationSuccessful()) {
-//            try {
-//                // Required to complete auth, sets the access token on the session
-//                dropbox.getSession().finishAuthentication();
-//                String token = dropbox.getSession().getOAuth2AccessToken();
-//                storePrefs(token);
-//            } catch (IllegalStateException e) {
-//                Log.i("DbAuthLog", "Error authenticating", e);
-//            }
-//        }
-//    }
     protected void onResume() {
         super.onResume();
         refreshStatus();
+        boolean prefDrop = prefs.getBoolean("prefDrop", false);
+        if (prefDrop) {
+            if (dropbox == null) {
+                dropbox = getDropbox();
+            }
+            if (dropbox.getSession().authenticationSuccessful()) {
+                try {
+                    // Required to complete auth, sets the access token on the session
+                    dropbox.getSession().finishAuthentication();
+                    String token = dropbox.getSession().getOAuth2AccessToken();
+                    storePrefs(token);
+                } catch (IllegalStateException e) {
+                    Log.i("DbAuthLog", "Error authenticating", e);
+                }
+            }
+        }
+    }
+
+    public void storePrefs(String token) {
+        prefEdit.putString("token", token);
+        prefEdit.apply();
     }
 
     public void refreshStatus() {
@@ -137,25 +145,35 @@ public class MainActivity extends Activity {
         }
         final TextView statusSample = (TextView) findViewById(R.id.statusSample);
         statusSample.setText(String.valueOf(engine.getSampleRate()));
+        final TextView statusConn = (TextView) findViewById(R.id.statusConn);
+        if (checkBluetooth()) {
+            statusConn.setText("Available");
+        } else {
+            statusConn.setText("Unavailable");
+        }
     }
 
-    public boolean bitBluetooth() {
+    public boolean checkBluetooth() {
         BluetoothDevice bita = engine.startBluetooth();
-        BluetoothSocket socket;
-        try {
-            socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
-            socket.connect();
+        if (bita != null) {
+            BluetoothSocket socket;
+            try {
+                socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
+                socket.connect();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            try {
+                engine.open(socket.getInputStream(), socket.getOutputStream());
+            } catch (BITalinoException | IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
         }
-        try {
-            engine.open(socket.getInputStream(), socket.getOutputStream());
-        } catch (BITalinoException | IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return false;
     }
 }
+

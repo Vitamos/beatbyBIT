@@ -40,8 +40,8 @@ public class Rec extends Activity {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
     }
-
     public void startClock(View v) {
+
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         Intent intent = new Intent(this, DownReceiver.class);
@@ -73,4 +73,5 @@ public class Rec extends Activity {
         if (chronometer.isActivated())
             stopClock(getCurrentFocus());
     }
+
 }

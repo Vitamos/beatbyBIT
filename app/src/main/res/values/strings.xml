@@ -23,5 +23,7 @@
     <string name="statusMAC">MAC: </string>
     <string name="statusSampleRate">Sample Rate: </string>
     <string name="statusText">Status: </string>
+    <string name="statusRec">Recording:</string>
+    <string name="statusConn">Connection:</string>
 
 </resources>
