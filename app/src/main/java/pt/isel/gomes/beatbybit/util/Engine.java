@@ -1,13 +1,10 @@
 package pt.isel.gomes.beatbybit.util;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -37,8 +34,7 @@ public class Engine implements Serializable {
     private int sampleRate = 100;
     private BITalinoDevice bit;
     private String macAddress;
-    private BluetoothAdapter bluetooth;
-    private String status;
+    private boolean connection = false;
     private static final UUID MY_UUID = UUID
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -48,18 +44,6 @@ public class Engine implements Serializable {
         } catch (BITalinoException e) {
             e.printStackTrace();
         }
-        bluetooth = BluetoothAdapter.getDefaultAdapter();
-        if (bluetooth != null) {
-            if (bluetooth.isEnabled()) {
-                String mydeviceaddress = bluetooth.getAddress();
-                String mydevicename = bluetooth.getName();
-                status = mydevicename + " : " + mydeviceaddress;
-            } else {
-                status = "Bluetooth is not Enabled.";
-            }
-        } else {
-            status = "NULL";
-        }
     }
 
     public String connect() {
@@ -67,7 +51,7 @@ public class Engine implements Serializable {
     }
 
     public UUID getUUID() {
-        return this.MY_UUID;
+        return MY_UUID;
     }
 
     public boolean setMac(String mac) {
@@ -123,8 +107,8 @@ public class Engine implements Serializable {
 
     public String[] createFile(Cursor cursor) {
         String[] values = new String[cursor.getCount()];
-        Log.i("TESTPROVIDER", String.valueOf(cursor.getCount()));
-        Log.i("TESTPROVIDER", String.valueOf(cursor.getColumnCount()));
+        //Log.i("TESTPROVIDER", String.valueOf(cursor.getCount()));
+        //Log.i("TESTPROVIDER", String.valueOf(cursor.getColumnCount()));
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             String line = "";
@@ -139,8 +123,7 @@ public class Engine implements Serializable {
     }
 
     public void writeToFile(String file, String[] data) {
-        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        File dir = new File(root, "beat");
+        File dir = getRootDir();
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -152,9 +135,10 @@ public class Engine implements Serializable {
                 out.write(s.getBytes());
             }
             out.close();
+        } catch (IOException e) {
 
-        } catch (Exception e) {
         }
+
     }
 
     public String getMacAddress() {
@@ -162,14 +146,12 @@ public class Engine implements Serializable {
     }
 
     public String[] getFiles() {
-        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        File dir = new File(root, "beat");
+        File dir = getRootDir();
         return dir.list();
     }
 
     public void testCloud(DropboxAPI<AndroidAuthSession> dropbox) throws IOException, DropboxException {
-        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        File dir = new File(root, "beat");
+        File dir = getRootDir();
         String[] values = getFiles();
         for (String s : values) {
             File f = new File(dir, s);
@@ -191,20 +173,28 @@ public class Engine implements Serializable {
         return this.sampleRate;
     }
 
-    public String getStatus() {
-        return this.status;
+    public boolean conStatus() {
+        return this.connection;
+    }
+
+    public void setConStatus(boolean con) {
+        this.connection = con;
     }
 
     public void toastStatus(Context c) {
-        Toast.makeText(c, this.status, Toast.LENGTH_LONG);
+        Toast.makeText(c, String.valueOf(this.connection), Toast.LENGTH_LONG);
     }
 
-    public BluetoothDevice startBluetooth() {
+    public File getRootDir() {
+        File root = Environment.getExternalStorageDirectory();
+        return new File(root, "beat");
+    }
+/*    public BluetoothDevice startBluetooth() {
         try {
             return bluetooth.getRemoteDevice(macAddress);
         } catch (NullPointerException e) {
             return null;
         }
 
-    }
+    }*/
 }

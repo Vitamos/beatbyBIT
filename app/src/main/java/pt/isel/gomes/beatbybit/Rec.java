@@ -26,7 +26,8 @@ public class Rec extends Activity {
     private static final String URL = "content://" + PROVIDER_NAME + "/data";
     private Uri URI;
     private Calendar c = Calendar.getInstance();
-    private SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmmss", Locale.ROOT);
+    private SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
+    private SimpleDateFormat time = new SimpleDateFormat("hhmm", Locale.ROOT);
     private Chronometer chronometer;
     private Engine engine;
 
@@ -40,8 +41,8 @@ public class Rec extends Activity {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
     }
-    public void startClock(View v) {
 
+    public void startClock(View v) {
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         Intent intent = new Intent(this, DownReceiver.class);
@@ -56,12 +57,12 @@ public class Rec extends Activity {
         sendBroadcast(intent);
         Cursor cursor = getContentResolver().query(URI, null, null, null, null);
         String[] data = engine.createFile(cursor);
-        engine.writeToFile(format.format(c.getTime()) + ".txt", data);
+        engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
         getContentResolver().delete(URI, null, null);
         //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean prefDrop = prefs.getBoolean("prefDrop", false);
-        if (prefDrop){
+        if (prefDrop) {
             intent = new Intent(this, SyncService.class);
             startService(intent);
         }

@@ -2,8 +2,7 @@ package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +11,7 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dropbox.client2.DropboxAPI;
@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private DropboxAPI<AndroidAuthSession> dropbox;
     private SharedPreferences.Editor prefEdit;
     private SharedPreferences prefs;
+    private BluetoothAdapter bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,6 @@ public class MainActivity extends Activity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        refreshStatus();
         engine.toastStatus(this);
     }
 
@@ -53,6 +53,9 @@ public class MainActivity extends Activity {
     public void checkDrop() {
         boolean checkDrop = prefs.getBoolean("checkDrop", false);
         if (!checkDrop) {
+            engine.setMac("00:00:00:00:00:00");
+            prefEdit.putString("mac_preference", engine.getMacAddress());
+            prefEdit.apply();
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -73,13 +76,7 @@ public class MainActivity extends Activity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Do you want to sync with Dropbox?").setPositiveButton("Yes", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
-
         }
-        boolean prefDrop = prefs.getBoolean("prefDrop", false);
-        if (prefDrop) {
-
-        }
-
     }
 
     public void launchRec(View view) {
@@ -126,6 +123,15 @@ public class MainActivity extends Activity {
                 }
             }
         }
+        Button rec = (Button) findViewById(R.id.recButton);
+        Button cooper = (Button) findViewById(R.id.cooperButton);
+        if (!engine.conStatus()) {
+            rec.setEnabled(false);
+            cooper.setEnabled(false);
+        } else {
+            rec.setEnabled(true);
+            cooper.setEnabled(true);
+        }
     }
 
     public void storePrefs(String token) {
@@ -135,7 +141,7 @@ public class MainActivity extends Activity {
 
     public void refreshStatus() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        engine.setMac(prefs.getString("mac_preference", "null"));
+        engine.setMac(prefs.getString("mac_preference", "FF:FF:FF:FF:FF:FF"));
         final TextView statusMAC = (TextView) findViewById(R.id.statusMAC);
         statusMAC.setText(engine.getMacAddress());
         try {
@@ -147,15 +153,32 @@ public class MainActivity extends Activity {
         statusSample.setText(String.valueOf(engine.getSampleRate()));
         final TextView statusConn = (TextView) findViewById(R.id.statusConn);
         if (checkBluetooth()) {
+            engine.setConStatus(true);
             statusConn.setText("Available");
         } else {
+            engine.setConStatus(false);
             statusConn.setText("Unavailable");
         }
     }
 
     public boolean checkBluetooth() {
-        BluetoothDevice bita = engine.startBluetooth();
-        if (bita != null) {
+        return true;
+        /*bluetooth = BluetoothAdapter.getDefaultAdapter();
+        if (bluetooth != null) {
+            if (bluetooth.isEnabled()) {
+                String mydeviceaddress = bluetooth.getAddress();
+                String mydevicename = bluetooth.getName();
+                engine.setConStatus(true);
+            } else {
+                engine.setConStatus(false);
+                return false;
+            }
+        } else {
+            engine.setConStatus(false);
+            return false;
+        }
+        BluetoothDevice bita = bluetooth.getRemoteDevice(engine.getMacAddress());
+        if (bita != null && engine.conStatus()) {
             BluetoothSocket socket;
             try {
                 socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
@@ -173,7 +196,8 @@ public class MainActivity extends Activity {
             }
             return true;
         }
-        return false;
+        return false;*/
     }
+
 }
 

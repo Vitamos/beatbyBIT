@@ -19,12 +19,7 @@ public class DownProvider extends ContentProvider {
     static final String tableName = "current";
     static final String dbCreate =
             " CREATE TABLE " + tableName +
-                    " (c1 TEXT NOT NULL," +
-                    "c2 TEXT NOT NULL," +
-                    "c3 TEXT NOT NULL," +
-                    "c4 TEXT NOT NULL," +
-                    "c5 TEXT NOT NULL," +
-                    "c6 TEXT NOT NULL," +
+                    " (ecg TEXT NOT NULL," +
                     "date TEXT NOT NULL);";
     static final int version = 1;
     private static final String PROVIDER_NAME = "com.example.provider.DownProvider";
@@ -44,7 +39,7 @@ public class DownProvider extends ContentProvider {
         Context context = getContext();
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         db = dbHelper.getWritableDatabase();
-        return (db == null) ? false : true;
+        return (db != null);
     }
 
     @Override

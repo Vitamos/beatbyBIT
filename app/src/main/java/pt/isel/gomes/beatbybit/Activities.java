@@ -2,6 +2,7 @@ package pt.isel.gomes.beatbybit;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,7 +24,7 @@ public class Activities extends Activity {
         listView = (ListView) findViewById(R.id.list);
 
         String[] values = engine.getFiles();
-        if (values != null && values.length > 0) {
+        if (values.length > 0) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
