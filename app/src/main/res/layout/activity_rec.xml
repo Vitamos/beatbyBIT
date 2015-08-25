@@ -32,10 +32,11 @@
         android:id="@+id/stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:onClick="stopClock"
-        android:text="@string/stop" />
+        android:text="@string/stop"
+        android:layout_below="@+id/start"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="102dp" />
 
     <Chronometer
         android:id="@+id/chronometer"
@@ -45,4 +46,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="41dp"
         android:textSize="50sp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tag1"
+        android:id="@+id/button"
+        android:layout_below="@+id/start"
+        android:layout_toLeftOf="@+id/start"
+        android:layout_toStartOf="@+id/start"
+        android:onClick="tag1"
+        />
 </RelativeLayout>

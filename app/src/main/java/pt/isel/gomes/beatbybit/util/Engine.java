@@ -38,6 +38,8 @@ public class Engine implements Serializable {
     private static final UUID MY_UUID = UUID
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    private boolean[] tags = {false, false, false, false, false, false};
+
     public Engine() {
         try {
             bit = new BITalinoDevice(sampleRate, new int[]{0, 1, 2, 3, 4, 5});
@@ -52,6 +54,19 @@ public class Engine implements Serializable {
 
     public UUID getUUID() {
         return MY_UUID;
+    }
+
+    public void toggleTag(int idx) {
+        tags[idx] = !tags[idx];
+    }
+
+    public String getTags() {
+        String result = "[" + tags[0];
+        for (int i = 1; i< result.length(); i++ ) {
+            result += "," + tags[i];
+        }
+        result += "]";
+        return result;
     }
 
     public boolean setMac(String mac) {

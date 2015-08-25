@@ -46,6 +46,7 @@ public class Rec extends Activity {
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         Intent intent = new Intent(this, DownReceiver.class);
+        intent.putExtra("engine", engine);
         intent.setAction("pt.isel.gomes.beatbybit.ACTION.start");
         sendBroadcast(intent);
     }
@@ -66,6 +67,10 @@ public class Rec extends Activity {
             intent = new Intent(this, SyncService.class);
             startService(intent);
         }
+    }
+
+    public void tag1() {
+        engine.toggleTag(1);
     }
 
     @Override

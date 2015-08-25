@@ -27,14 +27,18 @@ public class DownService extends IntentService {
 
     public DownService() {
         super("downService");
-
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        engine = (Engine) intent.getSerializableExtra("engine");
         Log.i("TESTSERVICE", "onCreate");
-        engine = new Engine();
         ContentValues values = new ContentValues();
         Set names = values.keySet();
         //Log.i("TESTPROVIDER", String.valueOf(names.size()));
@@ -46,15 +50,15 @@ public class DownService extends IntentService {
         }
         for (BITalinoFrame f : a) {
             values.put("ecg", f.getAnalog(2));
+            values.put("tags", engine.getTags());
             values.put("date", format.format(c.getTime()));
         }
         getContentResolver().insert(URI, values);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        //Log.i("TESTSERVICE", "started");
-        //Toast.makeText(getApplicationContext(),"teste",Toast.LENGTH_SHORT);
-    }
 
+    }
 }

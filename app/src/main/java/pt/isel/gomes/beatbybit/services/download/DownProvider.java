@@ -20,6 +20,7 @@ public class DownProvider extends ContentProvider {
     static final String dbCreate =
             " CREATE TABLE " + tableName +
                     " (ecg TEXT NOT NULL," +
+                    " tags TEXT NOT NULL," +
                     "date TEXT NOT NULL);";
     static final int version = 1;
     private static final String PROVIDER_NAME = "com.example.provider.DownProvider";
