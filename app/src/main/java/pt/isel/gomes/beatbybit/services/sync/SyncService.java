@@ -23,7 +23,7 @@ public class SyncService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        engine = new Engine();
+        engine = Engine.getInstance();
         dropbox = engine.getDropboxAPI(this);
     }
 

@@ -61,7 +61,7 @@ public enum BITalinoErrorTypes {
       map.put(error.getValue(), error);
 	}
 
-	private BITalinoErrorTypes(final int value, final String description) {
+	BITalinoErrorTypes(final int value, final String description) {
 		this.value = value;
 		this.description = description;
 	}

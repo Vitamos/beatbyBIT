@@ -22,14 +22,12 @@ import pt.isel.gomes.beatbybit.util.Engine;
 
 public class Rec extends Activity {
 
-    private static final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
-    private static final String URL = "content://" + PROVIDER_NAME + "/fileTable";
-    private Uri URI;
+    private Engine engine = Engine.getInstance();
     private Calendar c = Calendar.getInstance();
     private SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private SimpleDateFormat time = new SimpleDateFormat("hhmm", Locale.ROOT);
     private Chronometer chronometer;
-    private Engine engine;
+
     private boolean running;
 
 
@@ -37,8 +35,7 @@ public class Rec extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec);
-        engine = (Engine) getIntent().getSerializableExtra("engine");
-        URI = Uri.parse(URL);
+        engine = Engine.getInstance();
         chronometer = (Chronometer) findViewById(R.id.chronometer);
 
     }
@@ -48,7 +45,7 @@ public class Rec extends Activity {
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         Intent intent = new Intent(this, DownReceiver.class);
-        intent.putExtra("engine", engine);
+        //intent.putExtra("engine", engine);
         intent.setAction("pt.isel.gomes.beatbybit.ACTION.start");
         sendBroadcast(intent);
     }
@@ -60,10 +57,10 @@ public class Rec extends Activity {
             Intent intent = new Intent(this, DownReceiver.class);
             intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
             sendBroadcast(intent);
-            Cursor cursor = getContentResolver().query(URI, null, null, null, null);
+            Cursor cursor = getContentResolver().query(engine.getFileURI(), null, null, null, null);
             String[] data = engine.createFile(cursor);
             engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
-            getContentResolver().delete(URI, null, null);
+            getContentResolver().delete(engine.getFileURI(), null, null);
             //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean prefDrop = prefs.getBoolean("prefDrop", false);

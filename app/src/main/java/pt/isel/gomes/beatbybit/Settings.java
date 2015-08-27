@@ -25,7 +25,7 @@ public class Settings extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        engine = (Engine) getIntent().getSerializableExtra("engine");
+        engine = engine.getInstance();
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
     }
 
@@ -46,7 +46,7 @@ public class Settings extends Activity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean rtnval = true;
                     String address = (String) newValue;
-                    Log.i("ADD ", address);
+                    //Log.i("ADD ", address);
                     if (!engine.setMac(address)) {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle("Invalid Input");

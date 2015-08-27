@@ -19,7 +19,7 @@ public class DownReceiver extends BroadcastReceiver {
         Intent downIntent = new Intent(context, DownService.class);
         downIntent.putExtra("engine", engine);
         PendingIntent pendingAlarmIntent = PendingIntent.getService(context, 0, downIntent, 0);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         //Log.i("TESTSERVICE", "onReceive");
         if (intent.getAction().equals("pt.isel.gomes.beatbybit.ACTION.start")) {
             //Log.i("TESTSERVICE", "startService");

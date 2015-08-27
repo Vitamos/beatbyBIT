@@ -3,6 +3,7 @@ package pt.isel.gomes.beatbybit.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,6 +33,15 @@ public class Engine implements Serializable {
 
     private final static String APP_KEY = "un624qhagsgq8wb";
     private final static String APP_SECRET = "wid188gkonsbj62";
+
+    private static final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
+    private static final String fileURL = "content://" + PROVIDER_NAME + "/fileTable";
+    private static final String maleURL = "content://" + PROVIDER_NAME + "/maleTable";
+    private static final String femaleURL  = "content://" + PROVIDER_NAME + "/femaleTable";
+    private final Uri fileURI = Uri.parse(fileURL);
+    private final Uri maleURI = Uri.parse(maleURL);
+    private final Uri femaleURI = Uri.parse(femaleURL);
+
     private int sampleRate = 100;
     private BITalinoDevice bit;
     private String macAddress;
@@ -40,6 +50,7 @@ public class Engine implements Serializable {
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private boolean[] tags = {false, false, false, false, false, false};
+    private static Engine engine;
 
     public Engine() {
         try {
@@ -49,6 +60,27 @@ public class Engine implements Serializable {
         }
     }
 
+    public static Engine getInstance() {
+        if (engine == null)
+            engine = new Engine();
+
+        return engine;
+    }
+    public Uri getFileURI() {
+        return fileURI;
+    }
+
+    public Uri getMaleURI() {
+        return maleURI;
+    }
+
+    public Uri getFemaleURI() {
+        return femaleURI;
+    }
+
+    public String getProvider(){
+        return PROVIDER_NAME;
+    }
     public String connect() {
         return macAddress + " @ " + sampleRate + " Hz";
     }
@@ -58,7 +90,9 @@ public class Engine implements Serializable {
     }
 
     public void toggleTag(int idx) {
-        tags[idx] = true;
+        tags[idx] = !tags[idx];
+        Log.i("TAG CHANGED: ", idx + " - " + tags[idx]);
+
     }
 
     public String getTags() {
@@ -68,7 +102,7 @@ public class Engine implements Serializable {
             result += "," + tags[i];
         }
         result += "]";
-        Log.i("TAGS", result);
+        //Log.i("TAGS", result);
         return result;
     }
 
@@ -135,6 +169,7 @@ public class Engine implements Serializable {
                 line += "," + cursor.getString(j);
             }
             values[i] = line;
+            cursor.moveToNext();
         }
         cursor.close();
         return values;

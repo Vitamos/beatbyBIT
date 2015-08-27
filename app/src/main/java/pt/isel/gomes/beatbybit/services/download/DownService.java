@@ -18,9 +18,7 @@ import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 
 public class DownService extends IntentService {
 
-    private final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
-    private final String URL = "content://" + PROVIDER_NAME + "/fileTable";
-    private final Uri URI = Uri.parse(URL);
+
     private SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private Engine engine;
 
@@ -36,7 +34,7 @@ public class DownService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        engine = (Engine) intent.getSerializableExtra("engine");
+        engine = Engine.getInstance();
         //Log.i("TESTSERVICE", "onCreate");
         ContentValues values = new ContentValues();
         //Set names = values.keySet();
@@ -51,7 +49,7 @@ public class DownService extends IntentService {
             values.put("ecg", f.getAnalog(2));
             values.put("tags", engine.getTags());
         }
-        getContentResolver().insert(URI, values);
+        getContentResolver().insert(engine.getFileURI(), values);
         return super.onStartCommand(intent, flags, startId);
     }
 

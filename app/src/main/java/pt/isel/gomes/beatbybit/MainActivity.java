@@ -33,15 +33,11 @@ public class MainActivity extends Activity {
     private SharedPreferences.Editor prefEdit;
     private SharedPreferences prefs;
     private BluetoothAdapter bluetooth;
-    private final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
-    private final String maleURL = "content://" + PROVIDER_NAME + "/maleTable";
-    private final String femaleURL = "content://" + PROVIDER_NAME + "/femaleTable";
-    private final Uri maleURI = Uri.parse(maleURL);
-    private final Uri femaleURI = Uri.parse(femaleURL);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        engine = new Engine();
+        engine = Engine.getInstance();
         createCooperTable();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefEdit = prefs.edit();
@@ -77,8 +73,8 @@ public class MainActivity extends Activity {
             femaleValues.put("avgmin", female[i][2]);
             femaleValues.put("vbad", female[i][3]);
         }
-        getContentResolver().insert(maleURI, maleValues);
-        getContentResolver().insert(femaleURI, femaleValues);
+        getContentResolver().insert(engine.getMaleURI(), maleValues);
+        getContentResolver().insert(engine.getFemaleURI(), femaleValues);
     }
 
     public void checkDrop() {
@@ -112,25 +108,25 @@ public class MainActivity extends Activity {
 
     public void launchRec(View view) {
         Intent intent = new Intent(this, Rec.class);
-        intent.putExtra("engine", engine);
+        //intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
     public void launchCooper(View view) {
         Intent intent = new Intent(this, Cooper.class);
-        intent.putExtra("engine", engine);
+        //intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
     public void launchAct(View view) {
         Intent intent = new Intent(this, Activities.class);
-        intent.putExtra("engine", engine);
+        //intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
     public void launchSettings(View view) throws IOException, DropboxException {
         Intent intent = new Intent(this, Settings.class);
-        intent.putExtra("engine", engine);
+        //intent.putExtra("engine", engine);
         startActivity(intent);
 
     }
