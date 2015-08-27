@@ -18,10 +18,9 @@ import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 
 public class DownService extends IntentService {
 
-    private final String PROVIDER_NAME = "com.example.provider.DownProvider";
-    private final String URL = "content://" + PROVIDER_NAME + "/data";
+    private final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
+    private final String URL = "content://" + PROVIDER_NAME + "/fileTable";
     private final Uri URI = Uri.parse(URL);
-    private Calendar c = Calendar.getInstance();
     private SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private Engine engine;
 
@@ -38,9 +37,9 @@ public class DownService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         engine = (Engine) intent.getSerializableExtra("engine");
-        Log.i("TESTSERVICE", "onCreate");
+        //Log.i("TESTSERVICE", "onCreate");
         ContentValues values = new ContentValues();
-        Set names = values.keySet();
+        //Set names = values.keySet();
         //Log.i("TESTPROVIDER", String.valueOf(names.size()));
         BITalinoFrame[] a = new BITalinoFrame[0];
         try {
@@ -51,7 +50,6 @@ public class DownService extends IntentService {
         for (BITalinoFrame f : a) {
             values.put("ecg", f.getAnalog(2));
             values.put("tags", engine.getTags());
-            values.put("date", format.format(c.getTime()));
         }
         getContentResolver().insert(URI, values);
         return super.onStartCommand(intent, flags, startId);

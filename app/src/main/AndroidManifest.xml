@@ -68,8 +68,8 @@
 
         </receiver>
         <provider
-            android:name=".services.download.DownProvider"
-            android:authorities="com.example.provider.DownProvider"></provider>
+            android:name=".services.GeneralProvider"
+            android:authorities="com.example.provider.GeneralProvider"></provider>
     </application>
 
 </manifest>

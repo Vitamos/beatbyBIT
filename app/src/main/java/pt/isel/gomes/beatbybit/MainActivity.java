@@ -3,9 +3,11 @@ package pt.isel.gomes.beatbybit;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -22,6 +24,7 @@ import java.io.IOException;
 
 import pt.isel.gomes.beatbybit.util.Engine;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
+import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 
 public class MainActivity extends Activity {
 
@@ -30,10 +33,16 @@ public class MainActivity extends Activity {
     private SharedPreferences.Editor prefEdit;
     private SharedPreferences prefs;
     private BluetoothAdapter bluetooth;
+    private final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
+    private final String maleURL = "content://" + PROVIDER_NAME + "/maleTable";
+    private final String femaleURL = "content://" + PROVIDER_NAME + "/femaleTable";
+    private final Uri maleURI = Uri.parse(maleURL);
+    private final Uri femaleURI = Uri.parse(femaleURL);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         engine = new Engine();
+        createCooperTable();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefEdit = prefs.edit();
         checkDrop();
@@ -48,6 +57,28 @@ public class MainActivity extends Activity {
 
     public DropboxAPI<AndroidAuthSession> getDropbox() {
         return engine.getDropboxAPI(this);
+    }
+
+    public void createCooperTable() {
+        ContentValues maleValues = new ContentValues();
+        ContentValues femaleValues = new ContentValues();
+        int[] ages = new int[]{14, 16, 20, 29, 39, 49, 50};
+        int[][] male = new int[][]{{2700, 2400, 2200, 2100}, {2800, 2500, 2300, 2200}, {3000, 2700, 2500, 2300}, {2800, 2400, 2200, 1600}, {2700, 2300, 1900, 1500}, {2500, 2100, 1700, 1400}, {2400, 2000, 1600, 1300}};
+        int[][] female = new int[][]{{2000, 1900, 1600, 1500}, {2100, 2000, 1700, 1600}, {2300, 2100, 1800, 1700}, {2700, 2200, 1800, 1500}, {2500, 2000, 1700, 1400}, {2300, 1900, 1500, 1200}, {2200, 1700, 1400, 1100}};
+        for (int i = 0; i < ages.length; i++) {
+            maleValues.put("age", ages[i]);
+            maleValues.put("vgood", male[i][0]);
+            maleValues.put("avgmax", male[i][1]);
+            maleValues.put("avgmin", male[i][2]);
+            maleValues.put("vbad", male[i][3]);
+            femaleValues.put("age", ages[i]);
+            femaleValues.put("vgood", female[i][0]);
+            femaleValues.put("avgmax", female[i][1]);
+            femaleValues.put("avgmin", female[i][2]);
+            femaleValues.put("vbad", female[i][3]);
+        }
+        getContentResolver().insert(maleURI, maleValues);
+        getContentResolver().insert(femaleURI, femaleValues);
     }
 
     public void checkDrop() {

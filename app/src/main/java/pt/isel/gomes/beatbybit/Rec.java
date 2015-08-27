@@ -22,14 +22,15 @@ import pt.isel.gomes.beatbybit.util.Engine;
 
 public class Rec extends Activity {
 
-    private static final String PROVIDER_NAME = "com.example.provider.DownProvider";
-    private static final String URL = "content://" + PROVIDER_NAME + "/data";
+    private static final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
+    private static final String URL = "content://" + PROVIDER_NAME + "/fileTable";
     private Uri URI;
     private Calendar c = Calendar.getInstance();
     private SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private SimpleDateFormat time = new SimpleDateFormat("hhmm", Locale.ROOT);
     private Chronometer chronometer;
     private Engine engine;
+    private boolean running;
 
 
     @Override
@@ -43,6 +44,7 @@ public class Rec extends Activity {
     }
 
     public void startClock(View v) {
+        running = true;
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         Intent intent = new Intent(this, DownReceiver.class);
@@ -52,32 +54,34 @@ public class Rec extends Activity {
     }
 
     public void stopClock(View v) {
-        chronometer.stop();
-        Intent intent = new Intent(this, DownReceiver.class);
-        intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
-        sendBroadcast(intent);
-        Cursor cursor = getContentResolver().query(URI, null, null, null, null);
-        String[] data = engine.createFile(cursor);
-        engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
-        getContentResolver().delete(URI, null, null);
-        //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean prefDrop = prefs.getBoolean("prefDrop", false);
-        if (prefDrop) {
-            intent = new Intent(this, SyncService.class);
-            startService(intent);
+        if (running) {
+            running = false;
+            chronometer.stop();
+            Intent intent = new Intent(this, DownReceiver.class);
+            intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
+            sendBroadcast(intent);
+            Cursor cursor = getContentResolver().query(URI, null, null, null, null);
+            String[] data = engine.createFile(cursor);
+            engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
+            getContentResolver().delete(URI, null, null);
+            //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean prefDrop = prefs.getBoolean("prefDrop", false);
+            if (prefDrop) {
+                intent = new Intent(this, SyncService.class);
+                startService(intent);
+            }
         }
     }
 
-    public void tag1() {
+    public void tag1(View v) {
         engine.toggleTag(1);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (chronometer.isActivated())
-            stopClock(getCurrentFocus());
+        stopClock(getCurrentFocus());
     }
 
 }

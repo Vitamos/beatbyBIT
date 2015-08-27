@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -57,15 +58,17 @@ public class Engine implements Serializable {
     }
 
     public void toggleTag(int idx) {
-        tags[idx] = !tags[idx];
+        tags[idx] = true;
     }
 
     public String getTags() {
+        tags[0] = true;
         String result = "[" + tags[0];
-        for (int i = 1; i< result.length(); i++ ) {
+        for (int i = 1; i < tags.length; i++) {
             result += "," + tags[i];
         }
         result += "]";
+        Log.i("TAGS", result);
         return result;
     }
 
