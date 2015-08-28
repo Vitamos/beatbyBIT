@@ -37,7 +37,6 @@ public class DownService extends IntentService {
         engine = Engine.getInstance();
         //Log.i("TESTSERVICE", "onCreate");
         ContentValues values = new ContentValues();
-        //Set names = values.keySet();
         //Log.i("TESTPROVIDER", String.valueOf(names.size()));
         BITalinoFrame[] a = new BITalinoFrame[0];
         try {
@@ -48,8 +47,9 @@ public class DownService extends IntentService {
         for (BITalinoFrame f : a) {
             values.put("ecg", f.getAnalog(2));
             values.put("tags", engine.getTags());
+            getContentResolver().insert(engine.getFileURI(), values);
         }
-        getContentResolver().insert(engine.getFileURI(), values);
+
         return super.onStartCommand(intent, flags, startId);
     }
 

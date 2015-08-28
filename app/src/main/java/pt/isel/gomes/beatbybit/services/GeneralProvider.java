@@ -20,9 +20,9 @@ public class GeneralProvider extends ContentProvider {
     private static Engine engine = Engine.getInstance();
     static final String dbName = "data";
     static final int fileTable = 0, maleTable = 1, femaleTable = 2;
-    static final String fileCreate = " CREATE TABLE " + "fileTable" + " (ecg TEXT NOT NULL," + " tags TEXT NOT NULL); ";
-    static final String maleCreate = " CREATE TABLE " + "maleTable" + " (age INTEGER NOT NULL, " + "vgood INTEGER NOT NULL, " + "avgmax INTEGER NOT NULL, " + "avgmin INTEGER NOT NULL, " + "vbad INTEGER NOT NULL); ";
-    static final String femaleCreate = " CREATE TABLE " + "femaleTable" + " (age INTEGER NOT NULL, " + "vgood INTEGER NOT NULL, " + "avgmax INTEGER NOT NULL, " + "avgmin INTEGER NOT NULL, " + " vbad INTEGER NOT NULL); ";
+    static final String fileCreate = " CREATE TABLE IF NOT EXISTS " + "fileTable" + " (ecg TEXT NOT NULL," + " tags TEXT NOT NULL); ";
+    static final String maleCreate = " CREATE TABLE IF NOT EXISTS " + "maleTable" + " (age INTEGER NOT NULL, " + "vgood INTEGER NOT NULL, " + "avgmax INTEGER NOT NULL, " + "avgmin INTEGER NOT NULL, " + "vbad INTEGER NOT NULL); ";
+    static final String femaleCreate = " CREATE TABLE IF NOT EXISTS " + "femaleTable" + " (age INTEGER NOT NULL, " + "vgood INTEGER NOT NULL, " + "avgmax INTEGER NOT NULL, " + "avgmin INTEGER NOT NULL, " + " vbad INTEGER NOT NULL); ";
     static final int version = 1;
     private static final String URL = "content://" + "com.example.provider.GeneralProvider";
     private static final Uri CONTENT_URI = Uri.parse(URL);

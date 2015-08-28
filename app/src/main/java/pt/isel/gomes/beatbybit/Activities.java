@@ -19,7 +19,7 @@ public class Activities extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activities);
-        Engine engine = (Engine) getIntent().getSerializableExtra("engine");
+        Engine engine = Engine.getInstance();
 
         listView = (ListView) findViewById(R.id.list);
 

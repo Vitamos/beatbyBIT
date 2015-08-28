@@ -91,7 +91,7 @@ public class Engine implements Serializable {
 
     public void toggleTag(int idx) {
         tags[idx] = !tags[idx];
-        Log.i("TAG CHANGED: ", idx + " - " + tags[idx]);
+        //Log.i("TAG CHANGED: ", idx + " - " + tags[idx]);
 
     }
 

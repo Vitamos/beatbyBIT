@@ -72,9 +72,9 @@ public class MainActivity extends Activity {
             femaleValues.put("avgmax", female[i][1]);
             femaleValues.put("avgmin", female[i][2]);
             femaleValues.put("vbad", female[i][3]);
+            getContentResolver().insert(engine.getMaleURI(), maleValues);
+            getContentResolver().insert(engine.getFemaleURI(), femaleValues);
         }
-        getContentResolver().insert(engine.getMaleURI(), maleValues);
-        getContentResolver().insert(engine.getFemaleURI(), femaleValues);
     }
 
     public void checkDrop() {
