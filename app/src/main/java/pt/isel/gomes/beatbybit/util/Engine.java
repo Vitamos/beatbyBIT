@@ -1,5 +1,6 @@
 package pt.isel.gomes.beatbybit.util;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -48,7 +49,7 @@ public class Engine implements Serializable {
     private boolean connection = false;
     private static final UUID MY_UUID = UUID
             .fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    private BluetoothAdapter bluetooth;
     private boolean[] tags = {false, false, false, false, false, false};
     private static Engine engine;
 
@@ -114,7 +115,43 @@ public class Engine implements Serializable {
             macAddress = mac;
         return result;
     }
+    public boolean checkBluetooth() {
+        return true;
+        /*bluetooth = BluetoothAdapter.getDefaultAdapter();
+        if (bluetooth != null) {
+            if (bluetooth.isEnabled()) {
+                String mydeviceaddress = bluetooth.getAddress();
+                String mydevicename = bluetooth.getName();
+                engine.setConStatus(true);
+            } else {
+                engine.setConStatus(false);
+                return false;
+            }
+        } else {
+            engine.setConStatus(false);
+            return false;
+        }
+        BluetoothDevice bita = bluetooth.getRemoteDevice(engine.getMacAddress());
+        if (bita != null && engine.conStatus()) {
+            BluetoothSocket socket;
+            try {
+                socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
+                socket.connect();
 
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            try {
+                engine.open(socket.getInputStream(), socket.getOutputStream());
+            } catch (BITalinoException | IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return false;*/
+    }
 
     public BITalinoFrame[] read(int samples) throws BITalinoException {
         //return bit.read(samples);

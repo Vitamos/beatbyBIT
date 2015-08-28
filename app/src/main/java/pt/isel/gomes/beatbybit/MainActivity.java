@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
     private DropboxAPI<AndroidAuthSession> dropbox;
     private SharedPreferences.Editor prefEdit;
     private SharedPreferences prefs;
-    private BluetoothAdapter bluetooth;
+
 
 
     @Override
@@ -108,27 +108,22 @@ public class MainActivity extends Activity {
 
     public void launchRec(View view) {
         Intent intent = new Intent(this, Rec.class);
-        //intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
     public void launchCooper(View view) {
         Intent intent = new Intent(this, Cooper.class);
-        //intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
     public void launchAct(View view) {
         Intent intent = new Intent(this, Activities.class);
-        //intent.putExtra("engine", engine);
         startActivity(intent);
     }
 
     public void launchSettings(View view) throws IOException, DropboxException {
         Intent intent = new Intent(this, Settings.class);
-        //intent.putExtra("engine", engine);
         startActivity(intent);
-
     }
 
     protected void onResume() {
@@ -179,7 +174,7 @@ public class MainActivity extends Activity {
         final TextView statusSample = (TextView) findViewById(R.id.statusSample);
         statusSample.setText(String.valueOf(engine.getSampleRate()));
         final TextView statusConn = (TextView) findViewById(R.id.statusConn);
-        if (checkBluetooth()) {
+        if (engine.checkBluetooth()) {
             engine.setConStatus(true);
             statusConn.setText("Available");
         } else {
@@ -188,43 +183,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public boolean checkBluetooth() {
-        return true;
-        /*bluetooth = BluetoothAdapter.getDefaultAdapter();
-        if (bluetooth != null) {
-            if (bluetooth.isEnabled()) {
-                String mydeviceaddress = bluetooth.getAddress();
-                String mydevicename = bluetooth.getName();
-                engine.setConStatus(true);
-            } else {
-                engine.setConStatus(false);
-                return false;
-            }
-        } else {
-            engine.setConStatus(false);
-            return false;
-        }
-        BluetoothDevice bita = bluetooth.getRemoteDevice(engine.getMacAddress());
-        if (bita != null && engine.conStatus()) {
-            BluetoothSocket socket;
-            try {
-                socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
-                socket.connect();
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            try {
-                engine.open(socket.getInputStream(), socket.getOutputStream());
-            } catch (BITalinoException | IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-        }
-        return false;*/
-    }
 
 }
 
