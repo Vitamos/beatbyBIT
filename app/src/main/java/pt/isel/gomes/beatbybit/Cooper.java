@@ -10,18 +10,14 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import java.net.URI;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -42,34 +38,8 @@ public class Cooper extends Activity {
     private SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private SimpleDateFormat time = new SimpleDateFormat("hhmm", Locale.ROOT);
 
-    private class MyLocationListener implements LocationListener {
 
-        public void onLocationChanged(Location location) {
-            String message = String.format(
-                    "New Location \n Longitude: %1$s \n Latitude: %2$s",
-                    location.getLongitude(), location.getLatitude());
-
-            if (locAux != null) {
-                dist += location.distanceTo(locAux);
-            }
-            locAux = location;
-            Toast.makeText(Cooper.this, String.valueOf(dist), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-        }
-    }
-
-    private void buildAlertMessageNoGps() {
+    private void gpsDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
@@ -94,9 +64,6 @@ public class Cooper extends Activity {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         engine = Engine.getInstance();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
-        }
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
@@ -236,6 +203,34 @@ public class Cooper extends Activity {
             return result;
         }
         return null;
+    }
+
+    private class MyLocationListener implements LocationListener {
+
+        public void onLocationChanged(Location location) {
+            String message = String.format(
+                    "New Location \n Longitude: %1$s \n Latitude: %2$s",
+                    location.getLongitude(), location.getLatitude());
+
+            if (locAux != null) {
+                dist += location.distanceTo(locAux);
+            }
+            locAux = location;
+            Toast.makeText(Cooper.this, String.valueOf(dist), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            gpsDialog();
+        }
     }
 
     @Override
