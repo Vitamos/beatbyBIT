@@ -41,7 +41,7 @@ public class Activities extends Activity {
                     File file = new File(engine.getRootDir() + "/" + itemValue);
                     Intent intent = new Intent();
                     intent.setAction(android.content.Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(file), "text");
+                    intent.setDataAndType(Uri.fromFile(file), "text/plain");
                     startActivityForResult(intent, 10);
 
                 }

@@ -33,8 +33,6 @@ public class MainActivity extends Activity {
     private SharedPreferences.Editor prefEdit;
     private SharedPreferences prefs;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         engine = Engine.getInstance();

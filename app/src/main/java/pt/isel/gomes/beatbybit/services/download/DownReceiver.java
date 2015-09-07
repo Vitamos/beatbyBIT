@@ -9,13 +9,14 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import pt.isel.gomes.beatbybit.util.Engine;
+import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
 
 public class DownReceiver extends BroadcastReceiver {
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Engine engine = (Engine) intent.getSerializableExtra("engine");
+        Engine engine = Engine.getInstance();
         Intent downIntent = new Intent(context, DownService.class);
         downIntent.putExtra("engine", engine);
         PendingIntent pendingAlarmIntent = PendingIntent.getService(context, 0, downIntent, 0);
@@ -23,6 +24,11 @@ public class DownReceiver extends BroadcastReceiver {
         //Log.i("TESTSERVICE", "onReceive");
         if (intent.getAction().equals("pt.isel.gomes.beatbybit.ACTION.start")) {
             //Log.i("TESTSERVICE", "startService");
+            try {
+                engine.getBit().start();
+            } catch (BITalinoException e) {
+                e.printStackTrace();
+            }
             alarmManager.setInexactRepeating(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(),
@@ -31,6 +37,11 @@ public class DownReceiver extends BroadcastReceiver {
         } else if (intent.getAction().equals("pt.isel.gomes.beatbybit.ACTION.stop")) {
             context.stopService(downIntent);
             alarmManager.cancel(pendingAlarmIntent);
+            try {
+                engine.getBit().stop();
+            } catch (BITalinoException e) {
+                e.printStackTrace();
+            }
             //Log.i("TESTSERVICE", "stopService");
         }
     }

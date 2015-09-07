@@ -40,7 +40,7 @@ public class DownService extends IntentService {
         //Log.i("TESTPROVIDER", String.valueOf(names.size()));
         BITalinoFrame[] a = new BITalinoFrame[0];
         try {
-            a = engine.read(6);
+            a = engine.read(engine.getSampleRate());
         } catch (BITalinoException e) {
             e.printStackTrace();
         }

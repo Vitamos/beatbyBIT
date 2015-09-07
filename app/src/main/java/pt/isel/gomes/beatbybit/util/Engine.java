@@ -1,6 +1,8 @@
 package pt.isel.gomes.beatbybit.util;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -38,12 +40,17 @@ public class Engine implements Serializable {
     private static final String PROVIDER_NAME = "com.example.provider.GeneralProvider";
     private static final String fileURL = "content://" + PROVIDER_NAME + "/fileTable";
     private static final String maleURL = "content://" + PROVIDER_NAME + "/maleTable";
-    private static final String femaleURL  = "content://" + PROVIDER_NAME + "/femaleTable";
+    private static final String femaleURL = "content://" + PROVIDER_NAME + "/femaleTable";
     private final Uri fileURI = Uri.parse(fileURL);
     private final Uri maleURI = Uri.parse(maleURL);
     private final Uri femaleURI = Uri.parse(femaleURL);
 
     private int sampleRate = 100;
+
+    public BITalinoDevice getBit() {
+        return bit;
+    }
+
     private BITalinoDevice bit;
     private String macAddress;
     private boolean connection = false;
@@ -54,6 +61,10 @@ public class Engine implements Serializable {
     private static Engine engine;
 
     public Engine() {
+        if (macAddress == null) {
+            setMac("00:00:00:00:00:00");
+        }
+        checkBluetooth();
         try {
             bit = new BITalinoDevice(sampleRate, new int[]{0, 1, 2, 3, 4, 5});
         } catch (BITalinoException e) {
@@ -67,6 +78,7 @@ public class Engine implements Serializable {
 
         return engine;
     }
+
     public Uri getFileURI() {
         return fileURI;
     }
@@ -79,9 +91,10 @@ public class Engine implements Serializable {
         return femaleURI;
     }
 
-    public String getProvider(){
+    public String getProvider() {
         return PROVIDER_NAME;
     }
+
     public String connect() {
         return macAddress + " @ " + sampleRate + " Hz";
     }
@@ -115,27 +128,31 @@ public class Engine implements Serializable {
             macAddress = mac;
         return result;
     }
+
     public boolean checkBluetooth() {
-        return true;
-        /*bluetooth = BluetoothAdapter.getDefaultAdapter();
+        //return true;
+        bluetooth = BluetoothAdapter.getDefaultAdapter();
         if (bluetooth != null) {
             if (bluetooth.isEnabled()) {
                 String mydeviceaddress = bluetooth.getAddress();
                 String mydevicename = bluetooth.getName();
-                engine.setConStatus(true);
+                setConStatus(true);
             } else {
-                engine.setConStatus(false);
+                setConStatus(false);
                 return false;
             }
         } else {
-            engine.setConStatus(false);
+            setConStatus(false);
             return false;
         }
-        BluetoothDevice bita = bluetooth.getRemoteDevice(engine.getMacAddress());
-        if (bita != null && engine.conStatus()) {
+        // Log.i("SEARCHING: ", getMacAddress());
+        BluetoothDevice bita = bluetooth.getRemoteDevice(getMacAddress().toUpperCase());
+
+        if (bita != null && conStatus()) {
+            //Log.i("FOUND ", "IT");
             BluetoothSocket socket;
             try {
-                socket = bita.createRfcommSocketToServiceRecord(engine.getUUID());
+                socket = bita.createRfcommSocketToServiceRecord(getUUID());
                 socket.connect();
 
             } catch (IOException e) {
@@ -143,19 +160,19 @@ public class Engine implements Serializable {
                 return false;
             }
             try {
-                engine.open(socket.getInputStream(), socket.getOutputStream());
+                open(socket.getInputStream(), socket.getOutputStream());
             } catch (BITalinoException | IOException e) {
                 e.printStackTrace();
                 return false;
             }
             return true;
         }
-        return false;*/
+        return false;
     }
 
     public BITalinoFrame[] read(int samples) throws BITalinoException {
-        //return bit.read(samples);
-        BITalinoFrame[] b = new BITalinoFrame[samples];
+        return bit.read(samples);
+        /*BITalinoFrame[] b = new BITalinoFrame[samples];
         for (int i = 0; i < samples; i++) {
             b[i] = new BITalinoFrame();
             b[i].setAnalog(0, 1);
@@ -166,7 +183,7 @@ public class Engine implements Serializable {
             b[i].setAnalog(5, 1);
 
         }
-        return b;
+        return b;*/
     }
 
     public void open(InputStream is, OutputStream os) throws BITalinoException {
@@ -190,9 +207,6 @@ public class Engine implements Serializable {
         return mDBApi;
     }
 
-    public void close() {
-        System.out.println("Nao implementado");
-    }
 
     public String[] createFile(Cursor cursor) {
         String[] values = new String[cursor.getCount()];

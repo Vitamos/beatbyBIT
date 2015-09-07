@@ -37,7 +37,7 @@ public class Cooper extends Activity {
     private Calendar c = Calendar.getInstance();
     private SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private SimpleDateFormat time = new SimpleDateFormat("hhmm", Locale.ROOT);
-
+    private String finalResult;
 
     private void gpsDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -100,7 +100,7 @@ public class Cooper extends Activity {
             sendBroadcast(intent);
             Cursor cursor = getContentResolver().query(engine.getFileURI(), null, null, null, null);
             String[] data = engine.createFile(cursor);
-            engine.writeToFile("cooper_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
+            engine.writeToFile("cooper_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + "_" + finalResult +  ".txt", data);
             getContentResolver().delete(engine.getFileURI(), null, null);
             //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -122,8 +122,8 @@ public class Cooper extends Activity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         int age = ageList[1];
-                        String result = getResult(true, age, d);
-                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                        finalResult = getResult(true, age, d);
+                        Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -131,8 +131,8 @@ public class Cooper extends Activity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         int age = ageList[1];
-                        String result = getResult(false, age, d);
-                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                        finalResult = getResult(false, age, d);
+                        Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_LONG).show();
                     }
                 });
 

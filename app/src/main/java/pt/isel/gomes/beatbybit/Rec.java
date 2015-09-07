@@ -18,6 +18,7 @@ import java.util.Locale;
 import pt.isel.gomes.beatbybit.services.download.DownReceiver;
 import pt.isel.gomes.beatbybit.services.sync.SyncService;
 import pt.isel.gomes.beatbybit.util.Engine;
+import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
 
 
 public class Rec extends Activity {
@@ -68,10 +69,6 @@ public class Rec extends Activity {
                 startService(intent);
             }
         }
-    }
-
-    public void tag1(View v) {
-        engine.toggleTag(1);
     }
 
     @Override
