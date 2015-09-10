@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,8 +66,8 @@ public class Engine implements Serializable {
     public Engine() {
         if (macAddress == null) {
             setMac("00:00:00:00:00:00");
-        }
-        checkBluetooth();
+        } else
+            checkBluetooth();
         try {
             bit = new BITalinoDevice(sampleRate, new int[]{0, 1, 2, 3, 4, 5});
         } catch (BITalinoException e) {
@@ -130,45 +133,32 @@ public class Engine implements Serializable {
     }
 
     public boolean checkBluetooth() {
-        //return true;
         bluetooth = BluetoothAdapter.getDefaultAdapter();
-        if (bluetooth != null) {
-            if (bluetooth.isEnabled()) {
-                String mydeviceaddress = bluetooth.getAddress();
-                String mydevicename = bluetooth.getName();
-                setConStatus(true);
-            } else {
-                setConStatus(false);
-                return false;
-            }
-        } else {
-            setConStatus(false);
-            return false;
-        }
-        // Log.i("SEARCHING: ", getMacAddress());
-        BluetoothDevice bita = bluetooth.getRemoteDevice(getMacAddress().toUpperCase());
 
-        if (bita != null && conStatus()) {
-            //Log.i("FOUND ", "IT");
-            BluetoothSocket socket;
-            try {
-                socket = bita.createRfcommSocketToServiceRecord(getUUID());
-                socket.connect();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+        if (bluetooth != null && bluetooth.isEnabled()) {
+            Log.i("SEARCHING: ", getMacAddress());
+            BluetoothDevice bita = bluetooth.getRemoteDevice(getMacAddress().toUpperCase());
+            Log.i("FOUND: ", String.valueOf(bita != null));
+            if (bita != null) {
+                //Log.i("FOUND ", "IT");
+                BluetoothSocket socket;
+                try {
+                    bluetooth.cancelDiscovery();
+                    final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+                    // Method m = bita.getClass().getMethod("createRfcommSocket", new Class[] {int.class});
+                    // socket = (BluetoothSocket) m.invoke(bita, 1);
+                    socket = bita.createRfcommSocketToServiceRecord(getUUID());
+                    socket.connect();
+                    open(socket.getInputStream(), socket.getOutputStream());
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                open(socket.getInputStream(), socket.getOutputStream());
-            } catch (BITalinoException | IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
         }
         return false;
     }
+
 
     public BITalinoFrame[] read(int samples) throws BITalinoException {
         return bit.read(samples);

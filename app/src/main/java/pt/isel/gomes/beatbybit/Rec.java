@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,6 +43,7 @@ public class Rec extends Activity {
     }
 
     public void startClock(View v) {
+        Toast.makeText(this, "Started", Toast.LENGTH_SHORT).show();
         running = true;
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
@@ -68,13 +70,14 @@ public class Rec extends Activity {
                 intent = new Intent(this, SyncService.class);
                 startService(intent);
             }
+            Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        stopClock(getCurrentFocus());
+        if (!running)
+            super.onBackPressed();
     }
 
 }

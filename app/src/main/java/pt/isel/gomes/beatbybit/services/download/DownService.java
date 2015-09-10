@@ -35,22 +35,28 @@ public class DownService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         engine = Engine.getInstance();
-        //Log.i("TESTSERVICE", "onCreate");
-        ContentValues values = new ContentValues();
-        //Log.i("TESTPROVIDER", String.valueOf(names.size()));
-        BITalinoFrame[] a = new BITalinoFrame[0];
-        try {
-            a = engine.read(engine.getSampleRate());
-        } catch (BITalinoException e) {
-            e.printStackTrace();
-        }
-        for (BITalinoFrame f : a) {
-            values.put("ecg", f.getAnalog(2));
-            values.put("tags", engine.getTags());
-            getContentResolver().insert(engine.getFileURI(), values);
+        if (engine.conStatus()) {
+            //Log.i("TESTSERVICE", "onCreate");
+            ContentValues values = new ContentValues();
+            //Log.i("TESTPROVIDER", String.valueOf(names.size()));
+            BITalinoFrame[] a = new BITalinoFrame[0];
+
+            try {
+                a = engine.read(engine.getSampleRate());
+            } catch (BITalinoException e) {
+                e.printStackTrace();
+            }
+            catch (NullPointerException e){
+                return 0;
+            }
+            for (BITalinoFrame f : a) {
+                values.put("ecg", f.getAnalog(2));
+                values.put("tags", engine.getTags());
+                getContentResolver().insert(engine.getFileURI(), values);
+            }
         }
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override

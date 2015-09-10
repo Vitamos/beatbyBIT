@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -48,6 +49,18 @@ public class MainActivity extends Activity {
         }
         engine.toastStatus(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (engine.getBit() != null)
+                engine.getBit().stop();
+        } catch (BITalinoException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void gpsDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
@@ -65,6 +78,7 @@ public class MainActivity extends Activity {
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
     public DropboxAPI<AndroidAuthSession> getDropbox() {
         return engine.getDropboxAPI(this);
     }
@@ -94,9 +108,9 @@ public class MainActivity extends Activity {
     public void checkDrop() {
         boolean checkDrop = prefs.getBoolean("checkDrop", false);
         if (!checkDrop) {
-            engine.setMac("00:00:00:00:00:00");
+      /*      engine.setMac("00:00:00:00:00:00");
             prefEdit.putString("mac_preference", engine.getMacAddress());
-            prefEdit.apply();
+            prefEdit.apply();*/
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -176,6 +190,13 @@ public class MainActivity extends Activity {
     }
 
     public void refreshStatus() {
+        BluetoothAdapter btadapter = BluetoothAdapter.getDefaultAdapter();
+        if (btadapter != null) {
+            if (!btadapter.isEnabled()) {
+                Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBluetooth, 0);
+            }
+        }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         engine.setMac(prefs.getString("mac_preference", "FF:FF:FF:FF:FF:FF"));
         final TextView statusMAC = (TextView) findViewById(R.id.statusMAC);
@@ -188,15 +209,17 @@ public class MainActivity extends Activity {
         final TextView statusSample = (TextView) findViewById(R.id.statusSample);
         statusSample.setText(String.valueOf(engine.getSampleRate()));
         final TextView statusConn = (TextView) findViewById(R.id.statusConn);
+        Toast.makeText(this, "Searching..", Toast.LENGTH_SHORT).show();
         if (engine.checkBluetooth()) {
             engine.setConStatus(true);
             statusConn.setText("Available");
+            Toast.makeText(this, "BITalino Avaliable", Toast.LENGTH_SHORT).show();
         } else {
             engine.setConStatus(false);
             statusConn.setText("Unavailable");
+            Toast.makeText(this, "BITalino Unavailable", Toast.LENGTH_SHORT).show();
         }
     }
-
 
 
 }
