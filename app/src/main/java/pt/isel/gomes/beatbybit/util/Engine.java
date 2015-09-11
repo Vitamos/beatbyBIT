@@ -200,9 +200,6 @@ public class Engine implements Serializable {
 
     public void writeToFile(String file, String[] data) {
         File dir = getRootDir();
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
         File f = new File(dir + "/" + file);
         try {
             FileOutputStream out = new FileOutputStream(f);
@@ -263,6 +260,10 @@ public class Engine implements Serializable {
 
     public File getRootDir() {
         File root = Environment.getExternalStorageDirectory();
-        return new File(root, "beat");
+        File beat = new File(root, "beat");
+        if (!beat.exists()) {
+            beat.mkdirs();
+        }
+        return beat;
     }
 }
