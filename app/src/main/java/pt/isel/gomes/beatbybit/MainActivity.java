@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -25,7 +24,6 @@ import java.io.IOException;
 
 import pt.isel.gomes.beatbybit.util.Engine;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
-import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 
 public class MainActivity extends Activity {
 
@@ -108,9 +106,6 @@ public class MainActivity extends Activity {
     public void checkDrop() {
         boolean checkDrop = prefs.getBoolean("checkDrop", false);
         if (!checkDrop) {
-      /*      engine.setMac("00:00:00:00:00:00");
-            prefEdit.putString("mac_preference", engine.getMacAddress());
-            prefEdit.apply();*/
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -164,7 +159,6 @@ public class MainActivity extends Activity {
             }
             if (dropbox.getSession().authenticationSuccessful()) {
                 try {
-                    // Required to complete auth, sets the access token on the session
                     dropbox.getSession().finishAuthentication();
                     String token = dropbox.getSession().getOAuth2AccessToken();
                     storePrefs(token);

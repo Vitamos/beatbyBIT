@@ -38,6 +38,8 @@ public class Cooper extends Activity {
     private SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy", Locale.ROOT);
     private SimpleDateFormat time = new SimpleDateFormat("hhmm", Locale.ROOT);
     private String finalResult;
+    private int age;
+    private String sex;
 
     private void gpsDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -68,7 +70,7 @@ public class Cooper extends Activity {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-                if (elapsedMillis >= 10000) {
+                if (elapsedMillis >= 720000) {
                     stopClock(getCurrentFocus());
                 }
             }
@@ -82,6 +84,9 @@ public class Cooper extends Activity {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3, 1, new MyLocationListener());
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
+        Intent intent = new Intent(this, DownReceiver.class);
+        intent.setAction("pt.isel.gomes.beatbybit.ACTION.start");
+        sendBroadcast(intent);
     }
 
     public void stopClock(View v) {
@@ -90,29 +95,30 @@ public class Cooper extends Activity {
         if (running) {
             running = false;
             chronometer.stop();
-            if (elapsedMillis >= /*720000*/10000) {
+            Intent intent = new Intent(this, DownReceiver.class);
+            intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
+            sendBroadcast(intent);
+            if (elapsedMillis >= 10000) {
                 dialogs(totalDist);
             } else {
                 Toast.makeText(getApplicationContext(), "That was less than 12 minutes!", Toast.LENGTH_LONG).show();
             }
-            Intent intent = new Intent(this, DownReceiver.class);
-            intent.setAction("pt.isel.gomes.beatbybit.ACTION.stop");
-            sendBroadcast(intent);
-            Cursor cursor = getContentResolver().query(engine.getFileURI(), null, null, null, null);
-            String[] data = engine.createFile(cursor);
-            engine.writeToFile("cooper_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + "_" + finalResult + ".txt", data);
-            getContentResolver().delete(engine.getFileURI(), null, null);
-            //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            boolean prefDrop = prefs.getBoolean("prefDrop", false);
-            if (prefDrop) {
-                intent = new Intent(this, SyncService.class);
-                startService(intent);
-            }
+
         }
     }
 
-
+    public void end(){
+        Cursor cursor = getContentResolver().query(engine.getFileURI(), null, null, null, null);
+        String[] data = engine.createFile(cursor);
+        engine.writeToFile("cooper_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + "_" + finalResult + "_" + age + "_" + sex + ".txt", data);
+        getContentResolver().delete(engine.getFileURI(), null, null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean prefDrop = prefs.getBoolean("prefDrop", false);
+        if (prefDrop) {
+            Intent intent = new Intent(this, SyncService.class);
+            startService(intent);
+        }
+    }
     public void dialogs(final float d) {
         final int[] ageList = new int[2];
 
@@ -121,18 +127,22 @@ public class Cooper extends Activity {
         sexDialog.setPositiveButton("Male",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        int age = ageList[1];
+                        age = ageList[1];
                         finalResult = getResult(true, age, d);
+                        sex = "M";
                         Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_LONG).show();
+                        end();
                     }
                 });
 
         sexDialog.setNegativeButton("Female",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        int age = ageList[1];
+                        age = ageList[1];
                         finalResult = getResult(false, age, d);
+                        sex = "F";
                         Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_LONG).show();
+                        end();
                     }
                 });
 
@@ -171,9 +181,6 @@ public class Cooper extends Activity {
     }
 
     public String getResult(boolean male, int age, float d) {
-        // Log.i("AGE : ", "" + age);
-        // Log.i("SEX : ", male ? "Male" : "Female");
-
         Cursor cursor;
         if (male)
             cursor = getContentResolver().query(engine.getMaleURI(), null, "age = ?", new String[]{String.valueOf(age)}, null);
@@ -184,11 +191,6 @@ public class Cooper extends Activity {
             int avgmax = cursor.getInt(2);
             int avgmin = cursor.getInt(3);
             int vbad = cursor.getInt(4);
-          /*  Log.i("DISTANCE T : ", "" + d);
-            Log.i("vgood : ", "" + vgood);
-            Log.i("avgmax : ", "" + avgmax);
-            Log.i("avgmin : ", "" + avgmin);
-            Log.i("vbad : ", "" + vbad);*/
             String result;
             if (d > vgood)
                 result = "Very good!";
@@ -208,15 +210,10 @@ public class Cooper extends Activity {
     private class MyLocationListener implements LocationListener {
 
         public void onLocationChanged(Location location) {
-            String message = String.format(
-                    "New Location \n Longitude: %1$s \n Latitude: %2$s",
-                    location.getLongitude(), location.getLatitude());
-
             if (locAux != null) {
                 dist += location.distanceTo(locAux);
             }
             locAux = location;
-            Toast.makeText(Cooper.this, String.valueOf(dist), Toast.LENGTH_SHORT).show();
         }
 
         @Override

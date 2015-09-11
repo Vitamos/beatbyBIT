@@ -3,13 +3,9 @@ package pt.isel.gomes.beatbybit.services.download;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
-import java.util.Set;
 
 import pt.isel.gomes.beatbybit.util.Engine;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
@@ -36,11 +32,8 @@ public class DownService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         engine = Engine.getInstance();
         if (engine.conStatus()) {
-            //Log.i("TESTSERVICE", "onCreate");
             ContentValues values = new ContentValues();
-            //Log.i("TESTPROVIDER", String.valueOf(names.size()));
             BITalinoFrame[] a = new BITalinoFrame[0];
-
             try {
                 a = engine.read(engine.getSampleRate());
             } catch (BITalinoException e) {
@@ -55,7 +48,6 @@ public class DownService extends IntentService {
                 getContentResolver().insert(engine.getFileURI(), values);
             }
         }
-
         return START_STICKY;
     }
 

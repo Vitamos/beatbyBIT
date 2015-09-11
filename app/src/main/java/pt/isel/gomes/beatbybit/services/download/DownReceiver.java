@@ -20,9 +20,7 @@ public class DownReceiver extends BroadcastReceiver {
         Intent downIntent = new Intent(context, DownService.class);
         PendingIntent pendingAlarmIntent = PendingIntent.getService(context, 0, downIntent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Log.i("TESTSERVICE", "onReceive");
         if (intent.getAction().equals("pt.isel.gomes.beatbybit.ACTION.start")) {
-            //Log.i("TESTSERVICE", "startService");
             try {
                 engine.getBit().start();
             } catch (BITalinoException e) {
@@ -41,7 +39,6 @@ public class DownReceiver extends BroadcastReceiver {
             } catch (BITalinoException e) {
                 e.printStackTrace();
             }
-            Log.i("TESTSERVICE", "stopService");
         }
     }
 }

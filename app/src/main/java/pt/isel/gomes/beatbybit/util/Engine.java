@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,8 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -108,7 +105,6 @@ public class Engine implements Serializable {
 
     public void toggleTag(int idx) {
         tags[idx] = !tags[idx];
-        //Log.i("TAG CHANGED: ", idx + " - " + tags[idx]);
 
     }
 
@@ -162,18 +158,6 @@ public class Engine implements Serializable {
 
     public BITalinoFrame[] read(int samples) throws BITalinoException {
         return bit.read(samples);
-        /*BITalinoFrame[] b = new BITalinoFrame[samples];
-        for (int i = 0; i < samples; i++) {
-            b[i] = new BITalinoFrame();
-            b[i].setAnalog(0, 1);
-            b[i].setAnalog(1, 1);
-            b[i].setAnalog(2, 1);
-            b[i].setAnalog(3, 1);
-            b[i].setAnalog(4, 1);
-            b[i].setAnalog(5, 1);
-
-        }
-        return b;*/
     }
 
     public void open(InputStream is, OutputStream os) throws BITalinoException {
@@ -200,8 +184,6 @@ public class Engine implements Serializable {
 
     public String[] createFile(Cursor cursor) {
         String[] values = new String[cursor.getCount()];
-        //Log.i("TESTPROVIDER", String.valueOf(cursor.getCount()));
-        //Log.i("TESTPROVIDER", String.valueOf(cursor.getColumnCount()));
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             String line = "";
@@ -283,12 +265,4 @@ public class Engine implements Serializable {
         File root = Environment.getExternalStorageDirectory();
         return new File(root, "beat");
     }
-/*    public BluetoothDevice startBluetooth() {
-        try {
-            return bluetooth.getRemoteDevice(macAddress);
-        } catch (NullPointerException e) {
-            return null;
-        }
-
-    }*/
 }

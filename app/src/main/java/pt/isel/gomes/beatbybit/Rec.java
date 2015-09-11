@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -19,7 +18,6 @@ import java.util.Locale;
 import pt.isel.gomes.beatbybit.services.download.DownReceiver;
 import pt.isel.gomes.beatbybit.services.sync.SyncService;
 import pt.isel.gomes.beatbybit.util.Engine;
-import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
 
 
 public class Rec extends Activity {
@@ -63,7 +61,6 @@ public class Rec extends Activity {
             String[] data = engine.createFile(cursor);
             engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
             getContentResolver().delete(engine.getFileURI(), null, null);
-            //SO ACONTECE SE TIVER DROPBOX ASSOCIADA
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean prefDrop = prefs.getBoolean("prefDrop", false);
             if (prefDrop) {

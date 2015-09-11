@@ -60,7 +60,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.download.DownService"/>
+        <service android:name=".services.download.DownService" />
         <service android:name=".services.sync.SyncService" />
 
         <receiver android:name=".services.download.DownReceiver">

@@ -47,14 +47,14 @@
         android:textSize="50sp" />
 
     Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tag1"
-        android:id="@+id/button"
-        android:layout_below="@+id/start"
-        android:layout_toLeftOf="@+id/start"
-        android:layout_toStartOf="@+id/start"
-        android:onClick="tag1"
-        />
+    style="?android:attr/buttonStyleSmall"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="tag1"
+    android:id="@+id/button"
+    android:layout_below="@+id/start"
+    android:layout_toLeftOf="@+id/start"
+    android:layout_toStartOf="@+id/start"
+    android:onClick="tag1"
+    />
 </RelativeLayout>
