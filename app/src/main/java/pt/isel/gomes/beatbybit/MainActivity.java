@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         engine = Engine.getInstance();
+
         createCooperTable();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefEdit = prefs.edit();
@@ -44,6 +45,13 @@ public class MainActivity extends Activity {
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
+        }
+        BluetoothAdapter btadapter = BluetoothAdapter.getDefaultAdapter();
+        if (btadapter != null) {
+            if (!btadapter.isEnabled()) {
+                Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBluetooth, 1);
+            }
         }
         engine.toastStatus(this);
     }
@@ -184,13 +192,6 @@ public class MainActivity extends Activity {
     }
 
     public void refreshStatus() {
-        BluetoothAdapter btadapter = BluetoothAdapter.getDefaultAdapter();
-        if (btadapter != null) {
-            if (!btadapter.isEnabled()) {
-                Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBluetooth, 0);
-            }
-        }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         engine.setMac(prefs.getString("mac_preference", "FF:FF:FF:FF:FF:FF"));
         final TextView statusMAC = (TextView) findViewById(R.id.statusMAC);
