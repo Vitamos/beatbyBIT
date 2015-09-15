@@ -107,10 +107,10 @@ public class Cooper extends Activity {
         }
     }
 
-    public void end(){
+    public void end(final float d) {
         Cursor cursor = getContentResolver().query(engine.getFileURI(), null, null, null, null);
         String[] data = engine.createFile(cursor);
-        engine.writeToFile("cooper_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + "_" + finalResult + "_" + age + "_" + sex + ".txt", data);
+        engine.writeToFile("cooper_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + "_" + finalResult + "_" + age + "_" + sex + "_" + String.valueOf(d) + "_.txt", data);
         getContentResolver().delete(engine.getFileURI(), null, null);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean prefDrop = prefs.getBoolean("prefDrop", false);
@@ -119,6 +119,7 @@ public class Cooper extends Activity {
             startService(intent);
         }
     }
+
     public void dialogs(final float d) {
         final int[] ageList = new int[2];
 
@@ -131,7 +132,7 @@ public class Cooper extends Activity {
                         finalResult = getResult(true, age, d);
                         sex = "M";
                         Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_LONG).show();
-                        end();
+                        end(d);
                     }
                 });
 
@@ -142,7 +143,7 @@ public class Cooper extends Activity {
                         finalResult = getResult(false, age, d);
                         sex = "F";
                         Toast.makeText(getApplicationContext(), finalResult, Toast.LENGTH_LONG).show();
-                        end();
+                        end(d);
                     }
                 });
 

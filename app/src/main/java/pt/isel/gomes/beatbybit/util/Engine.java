@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +31,7 @@ import pt.isel.gomes.beatbybit.util.comm.BITalinoDevice;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoException;
 import pt.isel.gomes.beatbybit.util.comm.BITalinoFrame;
 
-public class Engine implements Serializable {
+public class Engine{
 
     private final static String APP_KEY = "un624qhagsgq8wb";
     private final static String APP_SECRET = "wid188gkonsbj62";
@@ -95,9 +94,6 @@ public class Engine implements Serializable {
         return PROVIDER_NAME;
     }
 
-    public String connect() {
-        return macAddress + " @ " + sampleRate + " Hz";
-    }
 
     public UUID getUUID() {
         return MY_UUID;
@@ -136,13 +132,9 @@ public class Engine implements Serializable {
             BluetoothDevice bita = bluetooth.getRemoteDevice(getMacAddress().toUpperCase());
             Log.i("FOUND: ", String.valueOf(bita != null));
             if (bita != null) {
-                //Log.i("FOUND ", "IT");
                 BluetoothSocket socket;
                 try {
                     bluetooth.cancelDiscovery();
-                    final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-                    // Method m = bita.getClass().getMethod("createRfcommSocket", new Class[] {int.class});
-                    // socket = (BluetoothSocket) m.invoke(bita, 1);
                     socket = bita.createRfcommSocketToServiceRecord(getUUID());
                     socket.connect();
                     open(socket.getInputStream(), socket.getOutputStream());

@@ -67,24 +67,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void gpsDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     public DropboxAPI<AndroidAuthSession> getDropbox() {
         return engine.getDropboxAPI(this);
     }
@@ -204,17 +186,17 @@ public class MainActivity extends Activity {
         final TextView statusSample = (TextView) findViewById(R.id.statusSample);
         statusSample.setText(String.valueOf(engine.getSampleRate()));
         final TextView statusConn = (TextView) findViewById(R.id.statusConn);
-        Toast.makeText(this, "Searching..", Toast.LENGTH_SHORT).show();
-        if (engine.checkBluetooth()) {
-            engine.setConStatus(true);
-            statusConn.setText("Available");
-            Toast.makeText(this, "BITalino Avaliable", Toast.LENGTH_SHORT).show();
-        } else {
-            engine.setConStatus(false);
-            statusConn.setText("Unavailable");
-            Toast.makeText(this, "BITalino Unavailable", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Searching..", Toast.LENGTH_SHORT).show();
+            if (engine.checkBluetooth()) {
+                engine.setConStatus(true);
+                statusConn.setText("Available");
+                Toast.makeText(this, "BITalino Avaliable", Toast.LENGTH_SHORT).show();
+            } else {
+                engine.setConStatus(false);
+                statusConn.setText("Unavailable");
+                Toast.makeText(this, "BITalino Unavailable", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
 
 
 }
