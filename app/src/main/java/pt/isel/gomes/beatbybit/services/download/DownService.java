@@ -47,7 +47,7 @@ public class DownService extends IntentService {
 
                     }
                     for (BITalinoFrame f : a) {
-                        double value = converter.scaleECG(2, f.getAnalog(2));
+                        double value = converter.scaleECG(2, f.getAnalog(3));
                         values.put("ecg", String.valueOf(value));
                         values.put("tags", engine.getTags());
                         getContentResolver().insert(engine.getFileURI(), values);

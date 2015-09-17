@@ -130,11 +130,21 @@ public class MainActivity extends Activity {
     }
 
     public void launchAct(View view) {
+        try {
+            engine.getBit().stop();
+        } catch (BITalinoException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(this, Activities.class);
         startActivity(intent);
     }
 
     public void launchSettings(View view) throws IOException, DropboxException {
+        try {
+            engine.getBit().stop();
+        } catch (BITalinoException e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
@@ -186,17 +196,17 @@ public class MainActivity extends Activity {
         final TextView statusSample = (TextView) findViewById(R.id.statusSample);
         statusSample.setText(String.valueOf(engine.getSampleRate()));
         final TextView statusConn = (TextView) findViewById(R.id.statusConn);
-            Toast.makeText(this, "Searching..", Toast.LENGTH_SHORT).show();
-            if (engine.checkBluetooth()) {
-                engine.setConStatus(true);
-                statusConn.setText("Available");
-                Toast.makeText(this, "BITalino Avaliable", Toast.LENGTH_SHORT).show();
-            } else {
-                engine.setConStatus(false);
-                statusConn.setText("Unavailable");
-                Toast.makeText(this, "BITalino Unavailable", Toast.LENGTH_SHORT).show();
-            }
+        Toast.makeText(this, "Searching..", Toast.LENGTH_SHORT).show();
+        if (engine.checkBluetooth()) {
+            engine.setConStatus(true);
+            statusConn.setText("Available");
+            Toast.makeText(this, "BITalino Avaliable", Toast.LENGTH_SHORT).show();
+        } else {
+            engine.setConStatus(false);
+            statusConn.setText("Unavailable");
+            Toast.makeText(this, "BITalino Unavailable", Toast.LENGTH_SHORT).show();
         }
+    }
 
 
 }

@@ -59,7 +59,7 @@ public class Rec extends Activity {
             sendBroadcast(intent);
             Cursor cursor = getContentResolver().query(engine.getFileURI(), null, null, null, null);
             String[] data = engine.createFile(cursor);
-            engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + ".txt", data);
+            engine.writeToFile("rec_" + date.format(c.getTime()) + "_" + time.format(c.getTime()) + "_" + engine.getSampleRate() + "_.txt", data);
             getContentResolver().delete(engine.getFileURI(), null, null);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean prefDrop = prefs.getBoolean("prefDrop", false);
